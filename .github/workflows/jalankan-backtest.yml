@@ -15,9 +15,6 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install module
-        run: npm install
-
       - name: 1. Jalankan Uji Otomatis (Pastikan 48 uji lulus)
         run: node scripts/test-backtest.mjs
 
