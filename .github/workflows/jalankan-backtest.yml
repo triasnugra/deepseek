@@ -1,0 +1,31 @@
+name: Run CryptoEliz Backtester
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode dari repository
+        uses: actions/checkout@v4
+
+      - name: Siapkan Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install module
+        run: npm install
+
+      - name: 1. Jalankan Uji Otomatis (Pastikan 48 uji lulus)
+        run: node scripts/test-backtest.mjs
+
+      - name: 2. Jalankan Backtester Utama (Butuh beberapa menit)
+        run: node scripts/backtest.mjs
+
+      - name: 3. Bungkus dan berikan hasilnya ke saya
+        uses: actions/upload-artifact@v4
+        with:
+          name: Laporan-Backtest-CryptoEliz
+          path: backtest/out/
