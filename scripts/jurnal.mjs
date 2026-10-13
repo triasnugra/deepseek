@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import {bj,kl,NOT,feat,alertList} from '../core.mjs';
+import {gradeTrade,mapK} from '../trade-sim.mjs';
+const DAY=864e5,H1=36e5,sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const F='data/journal.json'
 const alerts=()=>alertList().map(a=>a[1]).join('; ');
 
@@ -37,19 +39,14 @@ function addRow(agen,aset,o,px,al){
  else{Object.assign(row,{entry:q(entry),sl:q(sl),tp:q(tp)});const s=arah==='LONG'?1:-1;
   if(!(s*(entry-sl)>0&&s*(tp-entry)>0)||Math.abs(entry-sl)/entry>.15)row.hasil='tidak valid'}
  rows.push(row)}
-const fin=(r,h,x)=>{r.hasil=h;r.R=+x.toFixed(2)};
+// Penilaian memakai aturan bersama di trade-sim.mjs (sama persis dengan backtester):
+// candle pengisi dicek SL, urutan SL/TP dalam candle 1H yang ambigu diputuskan lewat data 1 menit.
 async function grade(r){
- const now=Date.now(),s=r.arah==='LONG'?1:-1,risk=Math.abs(r.entry-r.sl);
- const ks=(await bj(`klines?symbol=${r.aset}USDT&interval=1h&startTime=${r.t}&limit=1000`)).filter(a=>a[6]<now).map(a=>({h:+a[2],l:+a[3],c:+a[4],ct:a[6]}));
- let fill=false;
- for(const k of ks){if(k.ct>r.due)break;
-  if(!fill){if(s==1?k.l<=r.entry:k.h>=r.entry)fill=true;continue}
-  if(s==1?k.l<=r.sl:k.h>=r.sl)return fin(r,'SL',-1);
-  if(s==1?k.h>=r.tp:k.l<=r.tp)return fin(r,'TP',s*(r.tp-r.entry)/risk)}
- if(now<r.due)return;
- const last=ks.filter(k=>k.ct<=r.due).at(-1);
- if(!fill||!last)return fin(r,'tidak terisi',0);
- fin(r,'kedaluwarsa',s*(last.c-r.entry)/risk)}
+ const sym=r.aset+'USDT',t0=Math.floor(r.t/H1)*H1,now=Date.now();
+ const g=await gradeTrade(r,{now,
+  h1:async()=>(await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
+  m1:async(a,b)=>(await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK)});
+ if(g){r.hasil=g.hasil;r.R=+g.R.toFixed(2)}}
 
 // 1) nilai prediksi lama
 for(const r of rows.filter(r=>r.hasil==='menunggu')){try{await grade(r)}catch(e){console.log('nilai gagal',r.id,e.message)}}
@@ -73,10 +70,10 @@ if(process.env.FORCE||(hr>=1&&hr<=5)){
     console.log(n,mode,'ok')}catch(e){console.log(n,mode,'gagal:',e.message)}
    await sleep(2500)}}
 }
-fs.mkdirSync('jurnal/data',{recursive:true});
+fs.mkdirSync('data',{recursive:true});
 fs.writeFileSync(F,JSON.stringify(rows,null,1));
 try{const g=(await (await fetch('https://api.coingecko.com/api/v3/global',{signal:AbortSignal.timeout(15000)})).json()).data.market_cap_percentage;
- const DF='jurnal/data/dominance.json',D=fs.existsSync(DF)?JSON.parse(fs.readFileSync(DF,'utf8')):[];
+ const DF='data/dominance.json',D=fs.existsSync(DF)?JSON.parse(fs.readFileSync(DF,'utf8')):[];
  if(!D.some(x=>x.d===today)){D.push({d:today,btc:+g.btc.toFixed(2),eth:+g.eth.toFixed(2)});fs.writeFileSync(DF,JSON.stringify(D.slice(-400)))}}
 catch(e){console.log('dominasi gagal:',e.message)}
 console.log('baris:',rows.length);
