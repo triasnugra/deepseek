@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {bj,kl,NOT,feat,alertList} from '../core.mjs';
-const F='jurnal/data/journal.json',DAY=864e5,sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const F='data/journal.json'
 const alerts=()=>alertList().map(a=>a[1]).join('; ');
 
 const ELIZ=`Terapkan metode CryptoEliz:
