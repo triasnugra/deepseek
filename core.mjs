@@ -93,3 +93,16 @@ export async function conf(r){
  const held=a.slice(-8).some(q=>s==1?q.l<=r.entry*1.003&&q.c>r.entry:q.h>=r.entry*.997&&q.c<r.entry);
  if(s==1?c4>r.entry:c4<r.entry)return held?['ok','Retest tertahan di 4H']:['wait','Di sisi benar level, belum retest'];
  return['wait','Tunggu close 4H '+(s==1?'di atas':'di bawah')+' level']}
+
+// Satu-satunya jalur masukan untuk feat(), dipakai live (jurnal & halaman) dan sama persis dengan backtest.
+// k = kline harian Binance, candle terakhir boleh masih berjalan. Hasilnya:
+//  - bars: 999 candle harian yang sudah TUTUP + satu candle sintetis hari ini berisi HARGA OPEN saja.
+//    Keputusan dibuat dari open hari itu, sehingga tidak bergantung pada jam scan (01-05 UTC) atau pada
+//    high/low hari ini yang belum selesai.
+//  - qv: volume dolar harian kemarin (volume x close), bukan volume 24 jam bergulir.
+export function scanInput(k,now=Date.now()){
+ const closed=k.filter(q=>q.t+864e5<=now),forming=k.find(q=>q.t+864e5>now),last=closed.at(-1);
+ if(!last||!forming)throw new Error('kline tidak lengkap untuk scan');
+ const o=forming.o;
+ return {bars:[...closed.slice(-999),{t:forming.t,o,h:o,l:o,c:o,v:0}],qv:last.v*last.c};
+}

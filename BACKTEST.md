@@ -33,3 +33,13 @@ Perlu Node 18+ dan akses ke Binance (`data-api.binance.vision`). Unduhan pertama
 - Universe = koin teratas HARI INI (survivorship bias).
 - Aturan dirancang setelah melihat chart terbaru, jadi periode terakhir bukan out-of-sample murni.
 - Hasil backtest bukan jaminan hasil live.
+
+## Riset varian dengan uji terkunci (scripts/research.mjs)
+Menguji 16 varian (entry limit atau market, TP engine atau 1,5R/2R/3R, hold 3 atau 7 hari) dengan aturan yang
+ditetapkan di awal: pilih varian HANYA dari data sebelum tanggal pemisah, lalu uji SEKALI pada data sesudahnya.
+```
+node scripts/research.mjs --split 2025-07-01
+```
+Atau lewat GitHub: Actions > "Riset varian CryptoEliz" > Run workflow. Baca `research.md`.
+Aturan: jangan menambah varian atau mengganti tanggal pemisah setelah melihat hasil; itu membatalkan ujinya.
+Lulus hanya berarti layak masuk forward test di jurnal live, bukan izin memakai uang besar.

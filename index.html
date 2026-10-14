@@ -51,6 +51,7 @@ details{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 <h2 id="watch">Pantauan 40 koin</h2><div class="sc"><table id="wt"><tr><td class="m">Menunggu scan…</td></tr></table></div><p class="m">Ketuk baris koin untuk melihat grafiknya.</p><div id="wc"></div>
 
 <h2 id="jr">Jurnal sinyal Asgra</h2><div id="stats" class="g4"></div>
+<div id="fw" class="c m" style="display:none"></div>
 <div class="sc"><table id="jt"><tr><td class="m">Memuat jurnal…</td></tr></table></div>
 
 <details id="kartu"><summary>Kartu strategi Crypto</summary>
@@ -77,7 +78,7 @@ details{background:var(--card);border:1px solid var(--line);border-radius:10px;p
 <li>Belum dikodekan: order book dan heatmap likuiditas.</li></ul></details>
 
 <script type="module">
-import {bj,kl,NOT,feat,alertList,conf} from './core.mjs';
+import {bj,kl,NOT,feat,alertList,conf,scanInput} from './core.mjs';
 const $=s=>document.querySelector(s),SD=['turun','netral','naik'];
 const f=v=>v>=100?v.toFixed(1):v>=1?v.toFixed(3):v.toPrecision(3);
 const ld=k=>{try{return localStorage.getItem(k)}catch(e){return null}},sv=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
@@ -114,7 +115,7 @@ function chart(r){const k=r.k,W=640,Hh=230,n=k.length,bw=W/n,P=14,L=[[r.H,'range
 async function dom(){let g=null,H=[],eb=null;
  try{g=(await (await fetch('https://api.coingecko.com/api/v3/global',{signal:AbortSignal.timeout(10000)})).json()).data.market_cap_percentage}catch(e){}
  try{H=await (await fetch('data/dominance.json')).json()}catch(e){}
- try{eb=feat(await kl('ETHBTC'),1)}catch(e){}
+ try{const s=scanInput(await kl('ETHBTC'));eb=feat(s.bars,s.qv)}catch(e){}
  const al=all.filter(r=>r.s!=='ETH'&&r.s!=='BTC'),br=al.length?Math.round(al.filter(r=>r.ret30>btc.ret30).length/al.length*100):null;
  const d7=new Date(Date.now()-7*864e5).toISOString().slice(0,10),p=H.filter(x=>x.d<=d7).at(-1);
  const v=eb&&eb.tr==1&&br>=50?'Mengarah ke musim altcoin: ETH/BTC naik dan mayoritas altcoin mengungguli BTC.':eb&&eb.tr==-1&&br<40?'BTC dominan: altcoin tertinggal dari BTC. Pilih altcoin hanya dengan setup kuat.':'Campuran: belum musim altcoin penuh. Pilih koin satu per satu.';
@@ -122,12 +123,12 @@ async function dom(){let g=null,H=[],eb=null;
 async function go(){const b=$('#go');b.disabled=true;res=[];all=[];extra=[];$('#out').innerHTML='';$('#pg i').style.width='3%';
  try{$('#st').textContent='Mengambil daftar koin…';
   const t=await bj('ticker/24hr'),top=t.filter(x=>x.symbol.endsWith('USDT')&&!NOT.test(x.symbol.slice(0,-4))).sort((a,b)=>b.quoteVolume-a.quoteVolume).slice(0,40);
-  const bk=await kl('BTCUSDT');btc=feat(bk,1e9);btc.s='BTC';gate();
+  const bk=await kl('BTCUSDT');const bs=scanInput(bk);btc=feat(bs.bars,bs.qv);btc.s='BTC';gate();
   const v=bk.slice(-22,-2).map(q=>q.v),avg=v.reduce((a,b)=>a+b,0)/v.length;
   if(bk.at(-2).v<.6*avg)extra.push(['y','Volume BTC kemarin di bawah 60% rata-rata 20 hari.','Volume tipis']);
   if(btc.mid)extra.push(['y','BTC di mid-range. Eliz memilih diam saat ragu.','Interpretasi']);showAl();
   for(let i=0;i<top.length;i+=8){$('#st').textContent=`Memindai ${Math.min(i+8,40)}/40…`;$('#pg i').style.width=(10+Math.min(i+8,40)/40*90)+'%';
-   await Promise.all(top.slice(i,i+8).map(async x=>{try{const r=feat(await kl(x.symbol),+x.quoteVolume);r.s=x.symbol.slice(0,-4);all.push(r);
+   await Promise.all(top.slice(i,i+8).map(async x=>{try{const sc=scanInput(await kl(x.symbol));const r=feat(sc.bars,sc.qv);r.s=x.symbol.slice(0,-4);all.push(r);
     if(r.side&&r.type!='ditolak'){r.w=[];if(r.qv<2e7)r.w.push('volume tipis, OBV tidak andal');if(r.type.startsWith('spot'))r.w.push('SL lebar: hanya untuk spot tanpa leverage');if(r.side==1&&btc.tr==-1)r.w.push('melawan tren BTC');res.push(r)}}catch(e){}}))}
   res.sort((a,b)=>b.why.length-a.why.length||a.dist-b.dist);render();watch();await Promise.all(res.map(async r=>{try{r.cf=await conf(r)}catch(e){r.cf=['','tidak tersedia']}}));render();try{await dom()}catch(e){}
   $('#st').textContent=`Selesai: ${res.length} setup, ${all.length} koin dipantau.`;
@@ -145,5 +146,8 @@ fetch('data/journal.json').then(r=>r.json()).then(j=>{
  const H=['waktu','aset','arah','entry','sl','tp','hasil','R','alasan'];
  $('#jt').innerHTML='<tr>'+H.map(h=>`<th>${h}</th>`).join('')+'</tr>'+(J.map(r=>'<tr>'+H.map(h=>`<td class="${h=='hasil'?r.hasil:''}">${r[h]??''}</td>`).join('')+'</tr>').join('')||'<tr><td class="m">Belum ada sinyal tercatat.</td></tr>')
 }).catch(()=>{$('#jt').innerHTML='<tr><td class="m">Belum ada data jurnal.</td></tr>'});
+fetch('data/forward-report.json').then(r=>r.json()).then(a=>{const p=a.progress,c=a.counts,e=$('#fw');e.style.display='';
+ const v=a.ready&&a.verdict?(a.verdict.pass?'LULUS':'TIDAK LULUS'):'';
+ e.innerHTML='<b>Forward test</b> (uji bersih, mulai '+String(a.protocol.mulai).slice(0,10)+')<br>Trade terisi '+p.trade_terisi[0]+'/'+p.trade_terisi[1]+' · minggu '+p.minggu[0]+'/'+p.minggu[1]+' · menunggu '+c.menunggu+(a.chain.ok?'':' · <b>JURNAL DIEDIT, lihat data/forward-report.md</b>')+'<br>'+(a.ready?'Evaluasi: <b>'+v+'</b>':'Angka kinerja forward test disembunyikan sampai syarat terpenuhi, agar aturan tidak diubah di tengah jalan.')}).catch(()=>{});
 showAl();go();
 </script></body></html>
