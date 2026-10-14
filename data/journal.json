@@ -514,13 +514,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim, searah tren",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 11,
   "prev": "50013333da3c6b946acb",
-  "h": "b64f8b4f4ed55fb00ff1"
+  "h": "b64f8b4f4ed55fb00ff1",
+  "tx": 1791990000000,
+  "bm": {
+   "e": 0.005113,
+   "h": "SL",
+   "R": -1,
+   "tx": 1791968400000
+  },
+  "bi": {
+   "e": 0.005113,
+   "h": "TP",
+   "R": 2,
+   "tx": 1791986400000
+  }
  },
  {
   "id": "2026-10-14|Aturan Eliz|BTC",
@@ -837,13 +850,14 @@
   "keyakinan": "",
   "alasan": "sweep Monday High lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 25,
   "prev": "7dacb56e3dee963466e0",
-  "h": "bd533bbd82105fb78861"
+  "h": "bd533bbd82105fb78861",
+  "tx": 1791993600000
  },
  {
   "id": "2026-10-14|Aturan Eliz|OP",
