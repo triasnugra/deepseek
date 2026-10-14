@@ -34,6 +34,7 @@ export const DEFAULTS = {
   top: 40, days: 1500, warmup: 400, fee: 0.05, slip: 0.05, hold: 7, maxsl: 15,
   dedupe: true, boot: 5000, seed: 1, precise: false, refresh: false, symbols: null,
   out: 'backtest/out', cache: 'backtest/cache', conc: 4,
+  entry: 'limit', tpMult: null, split: null, fetchHold: null,
 };
 
 const HELP = `node scripts/backtest.mjs [opsi]
@@ -47,6 +48,9 @@ const HELP = `node scripts/backtest.mjs [opsi]
   --no-dedupe    catat sinyal tiap hari seperti jurnal live (default: satu order aktif per koin)
   --precise      resolusi 1 menit untuk candle 1H yang ambigu (lebih akurat, lebih banyak request)
   --boot N       jumlah resample bootstrap (default 5000)   --seed N  seed acak (default 1)
+  --entry MODE   limit (default, order di level engine) atau market (masuk di open hari sinyal)
+  --tp-mult X    ganti TP engine dengan kelipatan risiko tetap (mis. 2); default pakai TP engine
+  --split TGL    pisahkan hasil jadi pengembangan (sebelum TGL) dan UJI TERKUNCI (sejak TGL), format YYYY-MM-DD
   --refresh      hapus cache dan unduh ulang
   --out DIR      folder keluaran (default backtest/out)    --cache DIR  folder cache (default backtest/cache)`;
 
@@ -67,6 +71,9 @@ export function parseArgs(a) {
     else if (x === '--out') o.out = nx();
     else if (x === '--cache') o.cache = nx();
     else if (x === '--symbols') o.symbols = nx().split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+    else if (x === '--entry') { o.entry = nx(); if (!['limit', 'market'].includes(o.entry)) throw new Error('--entry harus limit atau market'); }
+    else if (x === '--tp-mult') o.tpMult = +nx();
+    else if (x === '--split') { o.split = nx(); if (!(Date.parse(o.split) > 0)) throw new Error('--split harus YYYY-MM-DD'); }
     else if (x === '--no-dedupe') o.dedupe = false;
     else if (x === '--precise') o.precise = true;
     else if (x === '--refresh') o.refresh = true;
@@ -115,7 +122,7 @@ export async function runBacktest(o, log = () => {}) {
   // cache candle 1H per sinyal
   const hf = path.join(o.cache, 'h1.json');
   const H1C = !o.refresh && fs.existsSync(hf) ? JSON.parse(fs.readFileSync(hf, 'utf8')) : {};
-  const nH = o.hold * 24 + 2;
+  const nH = (o.fetchHold || o.hold) * 24 + 2;
   const fetchH1 = async (sym, t) => {
     const key = `${sym}:${t}:${nH}`;
     if (!H1C[key]) {
@@ -142,23 +149,25 @@ export async function runBacktest(o, log = () => {}) {
       if (day.t + o.hold * DAY > now) { meta.immature++; break; } // belum cukup waktu untuk dinilai
       let f; try { f = feat(win(k, i), k[i - 1].v * k[i - 1].c); } catch { continue; }
       if (!f.side || !(f.slp <= o.maxsl) || f.type === 'ditolak') continue;
-      const s = f.side, due = day.t + o.hold * DAY, risk = Math.abs(f.entry - f.sl);
-      if (![f.entry, f.sl, f.tp].every(Number.isFinite) || !(s * (f.entry - f.sl) > 0) || !(s * (f.tp - f.entry) > 0)) continue;
+      const s = f.side, due = day.t + o.hold * DAY;
+      const E = o.entry === 'market' ? f.px : f.entry, risk = Math.abs(E - f.sl);
+      const T = o.tpMult ? E + s * o.tpMult * risk : f.tp;
+      if (![E, f.sl, T].every(Number.isFinite) || !(s * (E - f.sl) > 0) || !(s * (T - E) > 0) || (risk / E) * 100 > o.maxsl) continue;
       const src = { h1: () => fetchH1(sym, day.t), m1: o.precise ? m1f(sym) : undefined, now };
-      const g = await gradeTrade({ arah: s == 1 ? 'LONG' : 'SHORT', entry: f.entry, sl: f.sl, tp: f.tp, t: day.t, due }, src);
+      const g = await gradeTrade({ arah: s == 1 ? 'LONG' : 'SHORT', entry: E, sl: f.sl, tp: T, t: day.t, due }, src);
       if (!g) continue;
       const net = (gr, hasil, slp) => (FILLED(hasil) ? gr - cost / slp : 0);
-      const slp = (risk / f.entry) * 100, px = f.px, slpB = (risk / px) * 100;
+      const slp = (risk / E) * 100, px = f.px, slpB = (risk / px) * 100, bm = o.tpMult || 2;
       // baseline: market di open hari sinyal, jarak risiko sama
       const base = async (dir, tag) => {
         const sd = dir * s;
-        const b = await gradeTrade({ arah: sd == 1 ? 'LONG' : 'SHORT', entry: px, sl: px - sd * risk, tp: px + sd * 2 * risk, t: day.t, due }, src);
+        const b = await gradeTrade({ arah: sd == 1 ? 'LONG' : 'SHORT', entry: px, sl: px - sd * risk, tp: px + sd * bm * risk, t: day.t, due }, src);
         return { [tag + 'Hasil']: b.hasil, [tag + 'R']: net(b.R, b.hasil, slpB), [tag + 'Exit']: b.t };
       };
       out.push({
         sym, date: iso(day.t), t: day.t, s, side: s == 1 ? 'LONG' : 'SHORT', trig: f.trig, tr: f.tr, btcTr: sym === 'BTC' ? null : ctx.get(day.t) ?? 0,
         type: f.type, slp: +slp.toFixed(2), pos: +f.pos.toFixed(2), why: f.why.join('|').replace(/,/g, ';'),
-        entry: f.entry, sl: f.sl, tp: f.tp, hasil: g.hasil, Rg: g.R, R: net(g.R, g.hasil, slp), exitT: g.t,
+        entry: E, sl: f.sl, tp: T, hasil: g.hasil, Rg: g.R, R: net(g.R, g.hasil, slp), exitT: g.t,
         ...(await base(-1, 'mir')), ...(await base(1, 'mkt')),
       });
       if (o.dedupe) busy = g.t;
@@ -213,6 +222,15 @@ export function buildReport(trades, o, meta) {
   md += `\n**Kesimpulan otomatis:** ${C && C.lo > 0 ? 'R/trade strategi positif secara statistik (CI 95% di atas 0)' : 'edge positif BELUM terbukti (CI R/trade mencakup atau di bawah 0)'}; ` +
     `${dM && dM.lo > 0 ? 'lebih baik dari MIRROR' : 'belum terbukti lebih baik dari MIRROR'}; ${dK && dK.lo > 0 ? 'lebih baik dari MARKET per sinyal (logika limit di level menambah nilai)' : dK && dK.hi < 0 ? 'LEBIH BURUK dari MARKET per sinyal (menunggu retest merugikan: sinyal yang tidak terisi justru lebih baik)' : 'belum terbukti lebih baik dari MARKET per sinyal'}.\n`;
   if (Number.isFinite(adv) && adv > 0.05) md += `\nPeringatan adverse selection: entry market di open rata-rata ${rr(Sk.perSignal)}R/sinyal, strategi limit ${rr(S.perSignal)}R/sinyal. Order limit yang terisi cenderung yang bergerak melawanmu, sedangkan yang berlari menjauh tidak terisi.\n`;
+  if (o.split) {
+    const T0 = Date.parse(o.split), part = (name, rows) => {
+      const s2 = summarize(rows), c2 = bootCI(rows, { B: o.boot, seed: o.seed }), d2 = bootCI(rows.map(x => ({ hasil: 'TP', R: x.R - x.mktR, t: x.t })), { B: o.boot, seed: o.seed });
+      return `| ${name} | ${s2.signals} | ${s2.filled} | ${pct(s2.win)} | ${rr(s2.mean)} | ${ci(c2)} | ${rr(s2.perSignal)} | ${ci(d2)} |`;
+    };
+    md += `\n## Pembagian waktu: pengembangan vs uji terkunci\n\n| Periode | Sinyal | Terisi | Win% | R/trade | CI 95% R/trade | R/sinyal | CI selisih vs MARKET (per sinyal) |\n|---|---|---|---|---|---|---|---|\n`;
+    md += part(`Pengembangan (sebelum ${o.split})`, trades.filter(x => x.t < T0)) + '\n' + part(`UJI TERKUNCI (sejak ${o.split})`, trades.filter(x => x.t >= T0)) + '\n';
+    md += `\nPeriode terkunci hanya bermakna bila aturan TIDAK diubah setelah melihat angkanya.\n`;
+  }
   const tables = [
     groupTable('Per pemicu (trigger)', trades, x => x.trig, o),
     groupTable('Per arah', trades, x => x.side, o),

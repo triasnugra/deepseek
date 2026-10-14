@@ -1,8 +1,11 @@
 import fs from 'node:fs';
-import {bj,kl,NOT,feat,alertList} from '../core.mjs';
+import {bj,kl,NOT,feat,alertList,scanInput} from '../core.mjs';
 import {gradeTrade,mapK} from '../trade-sim.mjs';
+import {engineHash,sealRow,lastSealed,ensureProtocol,RES} from '../forward-lib.mjs';
 const DAY=864e5,H1=36e5,sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const F='data/journal.json'
+// Forward test: versi mesin dikunci lewat hash core.mjs + trade-sim.mjs. Mengubah salah satunya = mesin baru.
+const ENGINE=engineHash(fs.readFileSync(new URL('../core.mjs',import.meta.url),'utf8'),fs.readFileSync(new URL('../trade-sim.mjs',import.meta.url),'utf8'));
 const alerts=()=>alertList().map(a=>a[1]).join('; ');
 
 const ELIZ=`Terapkan metode CryptoEliz:
@@ -29,6 +32,9 @@ const AI={
 
 const rows=fs.existsSync(F)?JSON.parse(fs.readFileSync(F,'utf8')):[];
 const ids=new Set(rows.map(r=>r.id)),today=new Date().toISOString().slice(0,10);
+const PROTO=ensureProtocol(ENGINE);
+if(PROTO.created)console.log('Protokol forward test DIMULAI',PROTO.mulai,'mesin',ENGINE);
+else if(PROTO.engine!==ENGINE)console.log('PERINGATAN: mesin berubah (hash '+ENGINE+', protokol '+PROTO.engine+'). Baris baru TIDAK dihitung di forward test sampai protokol baru dimulai (hapus data/forward-protocol.json).');
 const q=v=>+Number(v).toPrecision(5);
 function addRow(agen,aset,o,px,al){
  const id=`${today}|${agen}|${aset}`;if(ids.has(id))return;ids.add(id);
@@ -38,6 +44,7 @@ function addRow(agen,aset,o,px,al){
  else if(arah!=='LONG'&&arah!=='SHORT'||![entry,sl,tp].every(Number.isFinite)){row.arah=arah||'?';row.hasil='tidak valid'}
  else{Object.assign(row,{entry:q(entry),sl:q(sl),tp:q(tp)});const s=arah==='LONG'?1:-1;
   if(!(s*(entry-sl)>0&&s*(tp-entry)>0)||Math.abs(entry-sl)/entry>.15)row.hasil='tidak valid'}
+ row.engine=ENGINE;sealRow(row,lastSealed(rows));
  rows.push(row)}
 // Penilaian memakai aturan bersama di trade-sim.mjs (sama persis dengan backtester):
 // candle pengisi dicek SL, urutan SL/TP dalam candle 1H yang ambigu diputuskan lewat data 1 menit.
@@ -46,10 +53,23 @@ async function grade(r){
  const g=await gradeTrade(r,{now,
   h1:async()=>(await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
   m1:async(a,b)=>(await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK)});
- if(g){r.hasil=g.hasil;r.R=+g.R.toFixed(2)}}
+ if(g){r.hasil=g.hasil;r.R=+g.R.toFixed(2);r.tx=g.t}}
+
+// Baseline forward: entry MARKET di menit pertama setelah sinyal (arah sama) dan MIRROR (arah dibalik), jarak risiko
+// sama dan TP 2R. Dinilai dengan aturan yang sama. Pembanding wajib: tanpa ini tidak bisa dibedakan edge dari kebetulan.
+async function gradeBase(r){
+ const sym=r.aset+'USDT',s=r.arah==='LONG'?1:-1,risk=Math.abs(r.entry-r.sl),now=Date.now(),t0=Math.floor(r.t/H1)*H1;
+ const m0=(await bj(`klines?symbol=${sym}&interval=1m&startTime=${r.t}&limit=1`)).map(mapK)[0];if(!m0)return;
+ const e=m0.o,src={now,
+  h1:async()=>(await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
+  m1:async(a,b)=>(await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK)};
+ const one=async d=>{const sd=d*s;return gradeTrade({arah:sd==1?'LONG':'SHORT',entry:e,sl:e-sd*risk,tp:e+sd*2*risk,t:r.t,due:r.due},src)};
+ const a=await one(1),b=await one(-1);
+ if(a&&b){r.bm={e,h:a.hasil,R:+a.R.toFixed(3),tx:a.t};r.bi={e,h:b.hasil,R:+b.R.toFixed(3),tx:b.t}}}
 
 // 1) nilai prediksi lama
 for(const r of rows.filter(r=>r.hasil==='menunggu')){try{await grade(r)}catch(e){console.log('nilai gagal',r.id,e.message)}}
+for(const r of rows.filter(r=>r.fwd&&r.agen===PROTO.agen&&RES(r.hasil)&&!r.bm&&(r.arah==='LONG'||r.arah==='SHORT')&&Number.isFinite(+r.entry))){try{await gradeBase(r)}catch(e){console.log('baseline gagal',r.id,e.message)}}
 
 // 2) prediksi baru (sekali sehari, setelah candle harian tutup)
 const hr=new Date().getUTCHours();
@@ -57,7 +77,7 @@ if(process.env.FORCE||(hr>=1&&hr<=5)){
  const t=await bj('ticker/24hr');
  const top=t.filter(x=>x.symbol.endsWith('USDT')&&!NOT.test(x.symbol.slice(0,-4))).sort((a,b)=>b.quoteVolume-a.quoteVolume).slice(0,40);
  const F40=[];
- for(let i=0;i<top.length;i+=8)await Promise.all(top.slice(i,i+8).map(async x=>{try{F40.push({s:x.symbol.slice(0,-4),...feat(await kl(x.symbol),+x.quoteVolume)})}catch(e){}}));
+ for(let i=0;i<top.length;i+=8)await Promise.all(top.slice(i,i+8).map(async x=>{try{const sc=scanInput(await kl(x.symbol));F40.push({s:x.symbol.slice(0,-4),...feat(sc.bars,sc.qv)})}catch(e){}}));
  const btc=F40.find(f=>f.s==='BTC'),sig=F40.filter(f=>f.side&&f.slp<=15).sort((a,b)=>b.why.length-a.why.length);
  const al=alerts(),cand=[...(btc?[btc]:[]),...sig.filter(f=>f.s!=='BTC').slice(0,5)];
  for(const f of sig)addRow('Aturan Eliz',f.s,{arah:f.side==1?'LONG':'SHORT',entry:f.entry,sl:f.sl,tp:f.tp,alasan:f.why.join(', ')},f.px,al);

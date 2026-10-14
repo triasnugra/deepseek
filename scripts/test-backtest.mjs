@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { feat } from '../core.mjs';
+import { feat, scanInput } from '../core.mjs';
 import { gradeTrade, H1 } from '../trade-sim.mjs';
 import { summarize, bootCI, mulberry32 } from './backtest-lib.mjs';
 import { runBacktest, buildReport, writeOutputs, DEFAULTS, win } from './backtest.mjs';
@@ -169,8 +169,58 @@ console.log('\n[4] Pipeline end-to-end (server Binance palsu)');
   ok(csv.length === trades.length + 1 && csv.every(l => l.split(',').length === csv[0].split(',').length), 'CSV rapi (jumlah kolom konsisten)');
   const again = await runBacktest(o); // jalan kedua memakai cache
   ok(JSON.stringify(buildReport(again.trades, o, again.meta).summary.overall) === JSON.stringify(rep.summary.overall), 'hasil identik pada jalan kedua (cache + deterministik)');
+  // varian entry / TP
+  const rm = await runBacktest({ ...o, entry: 'market', tpMult: 2, fetchHold: 7, out: path.join(tmp, 'o2') });
+  ok(rm.trades.length > 20, 'varian market + TP 2R menghasilkan sinyal');
+  ok(rm.trades.every(x => x.hasil !== 'tidak terisi'), 'entry market selalu terisi');
+  ok(rm.trades.some(x => x.hasil === 'TP') && rm.trades.filter(x => x.hasil === 'TP').every(x => Math.abs(x.Rg - 2) < 1e-6), 'TP tetap 2R: R kotor trade TP = 2');
+  const r3 = await runBacktest({ ...o, tpMult: 3 });
+  ok(r3.trades.some(x => x.hasil === 'TP') && r3.trades.filter(x => x.hasil === 'TP').every(x => Math.abs(x.Rg - 3) < 1e-6), 'TP 3R pada order limit: R kotor trade TP = 3');
+  const splitD = new Date(NOW - 500 * 864e5).toISOString().slice(0, 10);
+  const rep2 = buildReport(trades, { ...o, split: splitD }, meta);
+  ok(/UJI TERKUNCI/.test(rep2.md), 'laporan memuat bagian uji terkunci');
+  // riset
+  const { runResearch, renderResearch } = await import('./research.mjs');
+  const rs = await runResearch({ ...o, boot: 300 }, { grid: [{ entry: 'limit', tpMult: 2, hold: 7 }, { entry: 'market', tpMult: 2, hold: 3 }], split: splitD });
+  ok(rs.results.length === 2, 'riset menjalankan semua varian di kisi');
+  ok(rs.results.every(r => r.train.s.filled > 0 && r.test.s.filled > 0), 'kedua periode (pengembangan dan terkunci) berisi trade');
+  ok(/Hasil: (LULUS|TIDAK LULUS)/.test(renderResearch(rs, o)) || /Tidak ada varian/.test(renderResearch(rs, o)), 'laporan riset memuat keputusan');
   globalThis.fetch = realFetch;
   fs.writeFileSync('/tmp/sample-report.md', rep.md);
+}
+
+console.log('\n[5b] Jalur live = jalur backtest');
+{
+  const rnd = mulberry32(21), t0 = Date.UTC(2023, 0, 2), N = 800;
+  let p = 100; const A = Array.from({ length: N }, (_, i) => { const o = p, c = p * (1 + (rnd() - 0.5) * 0.05); p = c; return { t: t0 + i * 864e5, o, h: Math.max(o, c) * 1.01, l: Math.min(o, c) * 0.99, c, v: 1e5 + rnd() * 1e5 }; });
+  const iF = N - 1, now = A[iF].t + 3 * 36e5; // live: scan jam 03 UTC, candle terakhir sedang berjalan
+  const sc = scanInput(A, now), bt = win(A, iF), qvBT = A[iF - 1].v * A[iF - 1].c;
+  ok(sc.qv === qvBT, 'volume dolar: live = volume x close kemarin (bukan volume 24 jam bergulir)');
+  ok(JSON.stringify(sc.bars) === JSON.stringify(bt), 'input feat identik dengan backtest (999 candle tutup + open hari ini)');
+  const fl = feat(sc.bars, sc.qv), fb = feat(bt, qvBT);
+  const keys = ['side', 'entry', 'sl', 'tp', 'px', 'trig', 'tr', 'pos', 'type', 'slp', 'qv'];
+  ok(keys.every(k => JSON.stringify(fl[k]) === JSON.stringify(fb[k])), 'hasil feat live dan backtest identik pada semua field', JSON.stringify(keys.map(k => [k, fl[k], fb[k]])));
+  ok(fl.px === A[iF].o, 'harga acuan = open hari ini, tidak bergantung pada jam scan');
+  const sc2 = scanInput(A, A[iF].t + 23 * 36e5);
+  ok(JSON.stringify(sc2.bars) === JSON.stringify(sc.bars), 'jam scan 03 dan 23 UTC menghasilkan input yang sama');
+  let thrown = false; try { scanInput(A.slice(0, -1), now); } catch { thrown = true; }
+  ok(thrown, 'tanpa candle hari ini (tidak ada open untuk diacu): koin DILEWATI, tidak ditebak');
+  thrown = false; try { scanInput([], now); } catch { thrown = true; }
+  ok(thrown, 'kline kosong ditolak');
+}
+
+console.log('\n[5] Seleksi varian (anti data snooping)');
+{
+  const { chooseVariant, verdict } = await import('./research.mjs');
+  const mk = (name, trLo, trMean, trN, teLo, teMean, teN) => ({ name, train: { s: { filled: trN, mean: trMean }, ci: { lo: trLo, hi: trLo + 0.2 } }, test: { s: { filled: teN, mean: teMean }, ci: { lo: teLo, hi: teLo + 0.2 } } });
+  const R = [mk('A', -0.05, 0.02, 500, 0.4, 0.5, 300), mk('B', 0.01, 0.1, 500, -0.3, -0.2, 300), mk('C', 0.2, 0.3, 100, 0.5, 0.6, 300)];
+  const ch = chooseVariant(R);
+  ok(ch.name === 'B', 'seleksi hanya memakai data pengembangan: A (terbaik di data terkunci) tidak dipilih, C ditolak karena sampel kecil', ch && ch.name);
+  ok(!verdict(ch).pass, 'varian terpilih yang gagal di data terkunci dinyatakan TIDAK LULUS');
+  ok(verdict(mk('D', 0.05, 0.1, 500, 0.02, 0.1, 300)).pass, 'lulus bila semua syarat terpenuhi');
+  ok(!verdict(mk('E', 0.05, 0.1, 500, 0.02, 0.1, 50)).pass, 'tidak lulus bila sampel terkunci terlalu kecil');
+  ok(!verdict(mk('F', 0.05, -0.01, 500, 0.5, 0.5, 300)).pass, 'tidak lulus bila R/trade pengembangan tidak positif');
+  ok(!verdict(null).pass && chooseVariant([mk('G', 0.1, 0.2, 10, 0.1, 0.2, 300)]) === null, 'tanpa sampel pengembangan cukup: tidak ada pilihan');
 }
 
 console.log(`\n${fail ? 'GAGAL' : 'SEMUA LULUS'}: ${pass} lulus, ${fail} gagal`);
