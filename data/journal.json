@@ -491,13 +491,14 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim, OBV divergence",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 10,
   "prev": "f9c4ef1fb753d97caa52",
-  "h": "50013333da3c6b946acb"
+  "h": "50013333da3c6b946acb",
+  "tx": 1792008000000
  },
  {
   "id": "2026-10-14|Aturan Eliz|PUMP",
@@ -857,7 +858,19 @@
   "seq": 25,
   "prev": "7dacb56e3dee963466e0",
   "h": "bd533bbd82105fb78861",
-  "tx": 1791993600000
+  "tx": 1791993600000,
+  "bm": {
+   "e": 8.151,
+   "h": "TP",
+   "R": 2,
+   "tx": 1792008000000
+  },
+  "bi": {
+   "e": 8.151,
+   "h": "SL",
+   "R": -1,
+   "tx": 1791979200000
+  }
  },
  {
   "id": "2026-10-14|Aturan Eliz|OP",
