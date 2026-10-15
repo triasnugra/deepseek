@@ -1466,13 +1466,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday High lalu reclaim, Wolf: breakout trendline gagal",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 41,
   "prev": "39f11b9f1634cf5b88b1",
-  "h": "4249046c627cffdb8665"
+  "h": "4249046c627cffdb8665",
+  "tx": 1792090800000,
+  "bm": {
+   "e": 7.624,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792076400000
+  },
+  "bi": {
+   "e": 7.624,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792029600000
+  }
  },
  {
   "id": "2026-10-15|Aturan Eliz|BTC",
