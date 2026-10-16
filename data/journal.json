@@ -1781,13 +1781,14 @@
   "keyakinan": "",
   "alasan": "sweep Monday High lalu reclaim, Wolf: breakout trendline gagal",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 53,
   "prev": "c71ca330c00ec27861cf",
-  "h": "f22e678c0d2d0257f8ac"
+  "h": "f22e678c0d2d0257f8ac",
+  "tx": 1792170000000
  },
  {
   "id": "2026-10-16|Aturan Eliz|WAL",
