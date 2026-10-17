@@ -1874,13 +1874,14 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 57,
   "prev": "8a164b55ab802f3c9883",
-  "h": "581a9d2958a38ee800bf"
+  "h": "581a9d2958a38ee800bf",
+  "tx": 1792270800000
  },
  {
   "id": "2026-10-16|Aturan Eliz|INJ",
