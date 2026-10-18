@@ -2013,13 +2013,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 63,
   "prev": "b7e9604fbbcba64cc1ab",
-  "h": "b1dcf71065e4b80acf75"
+  "h": "b1dcf71065e4b80acf75",
+  "tx": 1792328400000,
+  "bm": {
+   "e": 0.09295,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792148400000
+  },
+  "bi": {
+   "e": 0.09295,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792129140000
+  }
  },
  {
   "id": "2026-10-16|Aturan Eliz|LTC",
@@ -2197,13 +2210,14 @@
   "keyakinan": "",
   "alasan": "Fib 0.75 tren turun, RSI divergence, searah tren",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 71,
   "prev": "e0846163295b5bdfd4a3",
-  "h": "893a53b06dd851716a7e"
+  "h": "893a53b06dd851716a7e",
+  "tx": 1792332000000
  },
  {
   "id": "2026-10-17|Aturan Eliz|DOT",
