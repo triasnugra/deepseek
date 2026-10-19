@@ -1771,13 +1771,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim, searah tren",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 52,
   "prev": "69d1e7fc5361c7ecaf6d",
-  "h": "c71ca330c00ec27861cf"
+  "h": "c71ca330c00ec27861cf",
+  "tx": 1792382400000,
+  "bm": {
+   "e": 7.461,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792162800000
+  },
+  "bi": {
+   "e": 7.461,
+   "h": "TP",
+   "R": 2,
+   "tx": 1792335600000
+  }
  },
  {
   "id": "2026-10-16|Aturan Eliz|CRCLB",
@@ -2160,13 +2173,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim, OBV divergence, searah tren",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 67,
   "prev": "b8135ff340afe57fafa7",
-  "h": "72024c35cc62f513de24"
+  "h": "72024c35cc62f513de24",
+  "tx": 1792382400000,
+  "bm": {
+   "e": 7.334,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792249200000
+  },
+  "bi": {
+   "e": 7.334,
+   "h": "TP",
+   "R": 2,
+   "tx": 1792350000000
+  }
  },
  {
   "id": "2026-10-17|Aturan Eliz|AVAX",
@@ -2602,13 +2628,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim, OBV divergence, searah tren",
   "alert": "Menjelang penutupan weekly (Senin 00:00 UTC).",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 85,
   "prev": "f913e0ca71b870e89ba6",
-  "h": "1c2c03279294a5de5fb4"
+  "h": "1c2c03279294a5de5fb4",
+  "tx": 1792382400000,
+  "bm": {
+   "e": 7.308,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792332000000
+  },
+  "bi": {
+   "e": 7.308,
+   "h": "TP",
+   "R": 2,
+   "tx": 1792350000000
+  }
  },
  {
   "id": "2026-10-18|Aturan Eliz|TRX",
@@ -2994,13 +3033,26 @@
   "keyakinan": "",
   "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, RSI divergence",
   "alert": "Senin: Monday range sedang terbentuk, harga cenderung kotor. Tunggu. Monday Low/High jadi level kunci minggu ini.",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "SL",
+  "R": -1,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 102,
   "prev": "0710eb091b92a290c25d",
-  "h": "840014c4ce0b8793dd57"
+  "h": "840014c4ce0b8793dd57",
+  "tx": 1792376880000,
+  "bm": {
+   "e": 0.29629,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792378560000
+  },
+  "bi": {
+   "e": 0.29629,
+   "h": "SL",
+   "R": -1,
+   "tx": 1792389600000
+  }
  },
  {
   "id": "2026-10-19|Aturan Eliz|BTC",
