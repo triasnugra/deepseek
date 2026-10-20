@@ -1,5 +1,5 @@
 {
- "dibuat": "2026-10-20T04:37:11.551Z",
+ "dibuat": "2026-10-20T04:37:39.117Z",
  "chain": {
   "ok": true,
   "n": 2,
@@ -7,8 +7,8 @@
   "errors": []
  },
  "protocol": {
-  "mulai": "2026-10-14T00:39:16.289Z",
-  "engine": "0537067ed55fc5be",
+  "mulai": "2026-10-20T04:37:35.431Z",
+  "engine": "df0e32450d4c77e4",
   "agen": "Aturan Eliz"
  },
  "ready": false,
@@ -20,7 +20,7 @@
   "menunggu": 0,
   "terisi": 0,
   "minggu_berbeda": 0,
-  "diabaikan_mesin_lain": 2,
+  "diabaikan_mesin_lain": 0,
   "dilewati_dedupe": 0
  },
  "progress": {
