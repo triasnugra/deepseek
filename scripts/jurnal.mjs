@@ -4,9 +4,20 @@ import {gradeTrade,mapK} from '../trade-sim.mjs';
 import {engineHash,sealRow,lastSealed,ensureProtocol,RES} from '../forward-lib.mjs';
 const DAY=864e5,H1=36e5,sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const F='data/journal.json'
+
 // Forward test: versi mesin dikunci lewat hash core.mjs + trade-sim.mjs. Mengubah salah satunya = mesin baru.
+//
+// >>> BARU: aturan evaluasi live sekarang memakai trailing stop (trail:true di gradeTrade).
+// Parameter trail:true TIDAK ikut terkunci di hash mesin (hash hanya mengunci ISI file core.mjs
+// dan trade-sim.mjs). Karena itu JANGAN mengubah trail:true <-> trail:false di tengah protokol.
+// Kalau perlu diubah, mulai protokol baru (hapus data/forward-protocol.json).
+// Parameter filter live (minQuality:50) juga demikian — ubah = protokol baru.
 const ENGINE=engineHash(fs.readFileSync(new URL('../core.mjs',import.meta.url),'utf8'),fs.readFileSync(new URL('../trade-sim.mjs',import.meta.url),'utf8'));
 const alerts=()=>alertList().map(a=>a[1]).join('; ');
+
+// >>> BARU: konstanta filter live
+const LIVE_MIN_QUALITY = 50;
+const LIVE_TRAIL = true;
 
 const ELIZ=`Terapkan metode CryptoEliz:
 - Ikuti tren; tren naik cari long, jangan short tanpa deviasi. BTC adalah gerbang: long altcoin saat BTC turun dihindari.
@@ -46,21 +57,25 @@ function addRow(agen,aset,o,px,al){
   if(!(s*(entry-sl)>0&&s*(tp-entry)>0)||Math.abs(entry-sl)/entry>.15)row.hasil='tidak valid'}
  row.engine=ENGINE;sealRow(row,lastSealed(rows));
  rows.push(row)}
+
 // Penilaian memakai aturan bersama di trade-sim.mjs (sama persis dengan backtester):
-// candle pengisi dicek SL, urutan SL/TP dalam candle 1H yang ambigu diputuskan lewat data 1 menit.
+// candle pengisi dicek SL, urutan SL/TP dalam candle 1H yang ambigu diputuskan lewat data 1 menit,
+// dan trailing stop aktif (BE di 1R, kunci 1R di 2R).
+// >>> BARU: parameter trail:true diteruskan ke gradeTrade.
 async function grade(r){
  const sym=r.aset+'USDT',t0=Math.floor(r.t/H1)*H1,now=Date.now();
- const g=await gradeTrade(r,{now,
+ const g=await gradeTrade(r,{now,trail:LIVE_TRAIL,
   h1:async()=>(await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
   m1:async(a,b)=>(await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK)});
  if(g){r.hasil=g.hasil;r.R=+g.R.toFixed(2);r.tx=g.t}}
 
 // Baseline forward: entry MARKET di menit pertama setelah sinyal (arah sama) dan MIRROR (arah dibalik), jarak risiko
 // sama dan TP 2R. Dinilai dengan aturan yang sama. Pembanding wajib: tanpa ini tidak bisa dibedakan edge dari kebetulan.
+// >>> BARU: baseline juga memakai trail:true — supaya perbandingan apple-to-apple.
 async function gradeBase(r){
  const sym=r.aset+'USDT',s=r.arah==='LONG'?1:-1,risk=Math.abs(r.entry-r.sl),now=Date.now(),t0=Math.floor(r.t/H1)*H1;
  const m0=(await bj(`klines?symbol=${sym}&interval=1m&startTime=${r.t}&limit=1`)).map(mapK)[0];if(!m0)return;
- const e=m0.o,src={now,
+ const e=m0.o,src={now,trail:LIVE_TRAIL,
   h1:async()=>(await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
   m1:async(a,b)=>(await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK)};
  const one=async d=>{const sd=d*s;return gradeTrade({arah:sd==1?'LONG':'SHORT',entry:e,sl:e-sd*risk,tp:e+sd*2*risk,t:r.t,due:r.due},src)};
@@ -77,11 +92,16 @@ if(process.env.FORCE||(hr>=1&&hr<=5)){
  const t=await bj('ticker/24hr');
  const top=t.filter(x=>x.symbol.endsWith('USDT')&&!NOT.test(x.symbol.slice(0,-4))).sort((a,b)=>b.quoteVolume-a.quoteVolume).slice(0,40);
  const F40=[];
- for(let i=0;i<top.length;i+=8)await Promise.all(top.slice(i,i+8).map(async x=>{try{const sc=scanInput(await kl(x.symbol));F40.push({s:x.symbol.slice(0,-4),...feat(sc.bars,sc.qv)})}catch(e){}}));
- const btc=F40.find(f=>f.s==='BTC'),sig=F40.filter(f=>f.side&&f.slp<=15).sort((a,b)=>b.why.length-a.why.length);
+ // >>> BARU: filter kualitas diterapkan di live (minQuality = LIVE_MIN_QUALITY)
+ for(let i=0;i<top.length;i+=8)await Promise.all(top.slice(i,i+8).map(async x=>{try{const sc=scanInput(await kl(x.symbol));F40.push({s:x.symbol.slice(0,-4),...feat(sc.bars,sc.qv,{minQuality:LIVE_MIN_QUALITY})})}catch(e){}}));
+ const btc=F40.find(f=>f.s==='BTC');
+ // >>> BARU: sort berdasarkan quality score (bukan jumlah why) supaya kandidat terbaik yang dipilih
+ const sig=F40.filter(f=>f.side&&f.slp<=15).sort((a,b)=>b.quality-a.quality);
  const al=alerts(),cand=[...(btc?[btc]:[]),...sig.filter(f=>f.s!=='BTC').slice(0,5)];
  for(const f of sig)addRow('Aturan Eliz',f.s,{arah:f.side==1?'LONG':'SHORT',entry:f.entry,sl:f.sl,tp:f.tp,alasan:f.why.join(', ')},f.px,al);
- const bundle=cand.map(f=>({aset:f.s,harga:q(f.px),tren_harian:['turun','netral','naik'][f.tr+1],btc_tren:['turun','netral','naik'][(btc?.tr??0)+1],ema20:q(f.e20),ema50:q(f.e50),rsi14:Math.round(f.rsi),obv_divergence:f.obvDiv,rsi_divergence:f.rsiDiv,range60d_high:q(f.H),range60d_low:q(f.L),posisi_range_pct:Math.round(f.pos*100),fib075:q(f.f75),deviasi_bawah_5h:f.devUp,deviasi_atas_5h:f.devDn,volume24h_usd:Math.round(f.qv)}));
+ const bundle=cand.map(f=>({aset:f.s,harga:q(f.px),tren_harian:['turun','netral','naik'][f.tr+1],btc_tren:['turun','netral','naik'][(btc?.tr??0)+1],ema20:q(f.e20),ema50:q(f.e50),rsi14:Math.round(f.rsi),obv_divergence:f.obvDiv,rsi_divergence:f.rsiDiv,range60d_high:q(f.H),range60d_low:q(f.L),posisi_range_pct:Math.round(f.pos*100),fib075:q(f.f75),deviasi_bawah_5h:f.devUp,deviasi_atas_5h:f.devDn,volume24h_usd:Math.round(f.qv),
+  // >>> BARU: kirim juga quality & regime ke AI, supaya keputusannya lebih terinformasi
+  quality:f.quality??0,regime:f.regime??'n/a',atr_pct:+(f.atrPct??0).toFixed(2)}));
  const px=Object.fromEntries(cand.map(f=>[f.s,f.px]));
  if(process.env.USE_AI&&bundle.length)for(const[n,a]of Object.entries(AI)){const key=process.env[a.key];if(!key)continue;
   for(const mode of['polos','eliz']){
