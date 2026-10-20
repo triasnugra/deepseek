@@ -37,10 +37,6 @@ Atau lewat GitHub: Actions > "Forward test - verifikasi penuh" > Run workflow.
 
 ## Yang dijamin dan batasnya
 
-- **2026-10-20**: Mesin di-upgrade (quality filter + trailing stop).
-  Protokol lama (mulai 2026-10-14, engine `0537067ed55fc5be`) diarsipkan
-  sebagai `data/journal-arsip-2026-10-14.json`. Protokol baru dimulai dari
-  nol dengan mesin baru.
 - Mengedit sinyal (entry/sl/tp/alasan/waktu/arah/mesin) atau menghapus baris di tengah: **terdeteksi** rantai hash.
 - Mengedit hasil: terdeteksi oleh `--regrade` (bukan rantai, karena hasil diisi belakangan).
 - Menghapus baris **terakhir**: tidak terdeteksi rantai. Ditutup oleh hash ujung yang dicetak ke ringkasan tiap run
@@ -48,3 +44,8 @@ Atau lewat GitHub: Actions > "Forward test - verifikasi penuh" > Run workflow.
 - Pemilik repo secara teknis bisa menghitung ulang seluruh rantai. Bukti waktu yang kuat adalah riwayat commit GitHub
   dan hash ujung di ringkasan Actions. Yang dilindungi di sini terutama **kamu dari dirimu sendiri**.
 - Lulus bukan jaminan untung di masa depan: pasar berubah dan sampelnya terbatas. Naikkan ukuran posisi bertahap.
+
+- **2026-10-20**: Mesin di-upgrade (quality filter + trailing stop).
+  Protokol lama (mulai 2026-10-14, engine `0537067ed55fc5be`) diarsipkan
+  sebagai `data/journal-arsip-2026-10-14.json`. Protokol baru dimulai dari
+  nol dengan mesin baru.
