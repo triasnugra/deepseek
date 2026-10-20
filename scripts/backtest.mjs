@@ -35,6 +35,8 @@ export const DEFAULTS = {
   dedupe: true, boot: 5000, seed: 1, precise: false, refresh: false, symbols: null,
   out: 'backtest/out', cache: 'backtest/cache', conc: 4,
   entry: 'limit', tpMult: null, split: null, fetchHold: null,
+  // >>> BARU: filter kualitas/regime dan opsi evaluasi exit
+  minQuality: 0, regimes: null, trail: false, timeExitDays: null,
 };
 
 const HELP = `node scripts/backtest.mjs [opsi]
@@ -52,7 +54,11 @@ const HELP = `node scripts/backtest.mjs [opsi]
   --tp-mult X    ganti TP engine dengan kelipatan risiko tetap (mis. 2); default pakai TP engine
   --split TGL    pisahkan hasil jadi pengembangan (sebelum TGL) dan UJI TERKUNCI (sejak TGL), format YYYY-MM-DD
   --refresh      hapus cache dan unduh ulang
-  --out DIR      folder keluaran (default backtest/out)    --cache DIR  folder cache (default backtest/cache)`;
+  --out DIR      folder keluaran (default backtest/out)    --cache DIR  folder cache (default backtest/cache)
+  --min-quality N        hanya catat sinyal dengan quality score >= N (0-100, default 0 = semua)
+  --regimes a,b,c        hanya catat sinyal di regime ini (bull,bear,trend,range,volatile,quiet)
+  --trail                aktifkan trailing stop (BE di 1R, kunci 1R di 2R)
+  --time-exit N          exit paksa di close setelah N hari (default: null = pakai --hold)`;
 
 export function parseArgs(a) {
   const o = { ...DEFAULTS };
@@ -77,6 +83,11 @@ export function parseArgs(a) {
     else if (x === '--no-dedupe') o.dedupe = false;
     else if (x === '--precise') o.precise = true;
     else if (x === '--refresh') o.refresh = true;
+    // >>> BARU
+    else if (x === '--min-quality') o.minQuality = +nx();
+    else if (x === '--regimes') o.regimes = nx().split(',').map(s => s.trim()).filter(Boolean);
+    else if (x === '--trail') o.trail = true;
+    else if (x === '--time-exit') o.timeExitDays = +nx();
     else if (x === '--help' || x === '-h') { console.log(HELP); process.exit(0); }
     else throw new Error('opsi tidak dikenal: ' + x + '\n' + HELP);
   }
@@ -147,14 +158,16 @@ export async function runBacktest(o, log = () => {}) {
       const day = k[i];
       if (day.t < busy) continue;
       if (day.t + o.hold * DAY > now) { meta.immature++; break; } // belum cukup waktu untuk dinilai
-      let f; try { f = feat(win(k, i), k[i - 1].v * k[i - 1].c); } catch { continue; }
+      // >>> BARU: teruskan filter kualitas/regime ke feat (default = perilaku lama)
+      let f; try { f = feat(win(k, i), k[i - 1].v * k[i - 1].c, { minQuality: o.minQuality, regimes: o.regimes }); } catch { continue; }
       if (!f.side || !(f.slp <= o.maxsl) || f.type === 'ditolak') continue;
       const s = f.side, due = day.t + o.hold * DAY;
       const E = o.entry === 'market' ? f.px : f.entry, risk = Math.abs(E - f.sl);
       const T = o.tpMult ? E + s * o.tpMult * risk : f.tp;
       if (![E, f.sl, T].every(Number.isFinite) || !(s * (E - f.sl) > 0) || !(s * (T - E) > 0) || (risk / E) * 100 > o.maxsl) continue;
       const src = { h1: () => fetchH1(sym, day.t), m1: o.precise ? m1f(sym) : undefined, now };
-      const g = await gradeTrade({ arah: s == 1 ? 'LONG' : 'SHORT', entry: E, sl: f.sl, tp: T, t: day.t, due }, src);
+      // >>> BARU: teruskan trail & timeExitDays ke gradeTrade (default = perilaku lama)
+      const g = await gradeTrade({ arah: s == 1 ? 'LONG' : 'SHORT', entry: E, sl: f.sl, tp: T, t: day.t, due }, { ...src, trail: o.trail, timeExitDays: o.timeExitDays });
       if (!g) continue;
       const net = (gr, hasil, slp) => (FILLED(hasil) ? gr - cost / slp : 0);
       const slp = (risk / E) * 100, px = f.px, slpB = (risk / px) * 100, bm = o.tpMult || 2;
@@ -167,6 +180,8 @@ export async function runBacktest(o, log = () => {}) {
       out.push({
         sym, date: iso(day.t), t: day.t, s, side: s == 1 ? 'LONG' : 'SHORT', trig: f.trig, tr: f.tr, btcTr: sym === 'BTC' ? null : ctx.get(day.t) ?? 0,
         type: f.type, slp: +slp.toFixed(2), pos: +f.pos.toFixed(2), why: f.why.join('|').replace(/,/g, ';'),
+        // >>> BARU: simpan quality/regime di trade log untuk audit
+        quality: f.quality ?? 0, regime: f.regime ?? 'n/a',
         entry: E, sl: f.sl, tp: T, hasil: g.hasil, Rg: g.R, R: net(g.R, g.hasil, slp), exitT: g.t,
         ...(await base(-1, 'mir')), ...(await base(1, 'mkt')),
       });
@@ -213,6 +228,8 @@ export function buildReport(trades, o, meta) {
   let md = `# Backtest CryptoEliz\n\n`;
   md += `- Periode sinyal: ${trades[0].date} sampai ${trades.at(-1).date} | koin dipakai: ${meta.used} dari ${meta.universe}${meta.skipped.length ? ` (dilewati: ${meta.skipped.join(', ')})` : ''}\n`;
   md += `- Parameter: hold ${o.hold} hari, SL maks ${o.maxsl}%, biaya ${o.fee}%/sisi + slip ${o.slip}% (total ${(2 * o.fee + o.slip).toFixed(2)}% per trade), ${o.dedupe ? 'satu order aktif per koin' : 'semua sinyal harian dicatat (tumpang tindih)'}, resolusi ${o.precise ? '1 menit untuk candle ambigu' : '1H, SL didahulukan bila ambigu'}\n`;
+  // >>> BARU: parameter filter/trail ditampilkan supaya bisa diaudit
+  md += `- Filter: minQuality ${o.minQuality || 0}, regimes ${o.regimes ? o.regimes.join('|') : 'semua'}, trail ${o.trail ? 'on' : 'off'}, timeExit ${o.timeExitDays ? o.timeExitDays + 'h' : 'off'}\n`;
   md += `- Blok bootstrap: ${C ? C.clusters : 0} minggu berbeda. Jumlah minggu inilah ukuran sampel independen yang sebenarnya, bukan jumlah trade.\n\n`;
   md += `## Ringkasan (R = kelipatan risiko, sudah dikurangi biaya)\n\nR/trade = rata-rata per trade yang terisi (yang benar-benar kamu alami). R/sinyal = total R dibagi SEMUA sinyal, tidak terisi dihitung 0R (dasar perbandingan dengan baseline).\n\n| Skenario | Sinyal | Terisi | TP/SL/Exp | Win% | R/trade | CI 95% R/trade | R/sinyal | Median R | Total R | PF | MaxDD (R) |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n`;
   md += row('**Strategi (limit di level)**', S, C) + '\n' + row('Baseline MIRROR (arah dibalik)', Sm, Cm) + '\n' + row('Baseline MARKET (arah sama, entry open)', Sk, Ck) + '\n';
@@ -237,16 +254,20 @@ export function buildReport(trades, o, meta) {
     groupTable('Searah / lawan tren makro koin', trades, x => (x.tr === x.s ? 'searah tren' : x.tr === 0 ? 'tren netral' : 'lawan tren'), o),
     groupTable('Terhadap tren BTC', trades, x => (x.btcTr == null ? 'BTC sendiri' : x.btcTr === 0 ? 'BTC netral' : x.btcTr === x.s ? 'searah BTC' : 'lawan BTC'), o),
     groupTable('Tipe setup', trades, x => x.type, o),
+    // >>> BARU: bucket quality dan regime
+    groupTable('Skor kualitas (quality)', trades, x => `${Math.floor((x.quality || 0) / 10) * 10}-${Math.floor((x.quality || 0) / 10) * 10 + 9}`, o),
+    groupTable('Rezim pasar (regime)', trades, x => x.regime || 'n/a', o),
     groupTable('Per kuartal (stabilitas dari waktu ke waktu)', trades, x => `${x.date.slice(0, 4)}-Q${Math.floor(+x.date.slice(5, 7) / 3.01) + 1}`, o),
   ];
   md += tables.map(t => t.md).join('');
-  md += `\n## Cara membaca dan batasannya\n- Win rate tidak bermakna sendirian. Yang menentukan adalah rata-rata R dan selang kepercayaannya.\n- Banyak grup diuji sekaligus, jadi sebagian akan tampak signifikan hanya karena kebetulan. Koreksi Bonferroni berlaku per tabel, bukan global; dengan 6 tabel, satu-dua tanda 'signifikan' tetap bisa muncul murni kebetulan (pada uji data acak tanpa edge pun kadang ada satu). Perlakukan grup yang positif sebagai hipotesis untuk diuji pada data baru, bukan bukti.\n- Universe diambil dari koin bervolume terbesar HARI INI, sehingga ada survivorship bias: koin yang gagal atau didelist tidak ikut teruji.\n- Scan disimulasikan tepat 00:00 UTC (hanya harga open hari itu), sedangkan jurnal live memindai jam 01-05 UTC. Hasilnya bisa sedikit berbeda.\n- Aturan engine dirancang setelah melihat chart terbaru, jadi periode terakhir bukan data out-of-sample murni. Pegang kuartal-kuartal paling lama sebagai uji yang lebih jujur.\n- Biaya funding futures, likuiditas, dan slippage nyata saat volatil belum dimodelkan. Ukuran posisi dianggap sama (1R per trade); drawdown dalam R bukan drawdown akun.\n`;
+  md += `\n## Cara membaca dan batasannya\n- Win rate tidak bermakna sendirian. Yang menentukan adalah rata-rata R dan selang kepercayaannya.\n- Banyak grup diuji sekaligus, jadi sebagian akan tampak signifikan hanya karena kebetulan. Koreksi Bonferroni berlaku per tabel, bukan global.\n- Universe diambil dari koin bervolume terbesar HARI INI, sehingga ada survivorship bias.\n- Scan disimulasikan tepat 00:00 UTC (hanya harga open hari itu), sedangkan jurnal live memindai jam 01-05 UTC.\n- Aturan engine dirancang setelah melihat chart terbaru, jadi periode terakhir bukan data out-of-sample murni.\n- Biaya funding futures, likuiditas, dan slippage nyata saat volatil belum dimodelkan.\n`;
   return { md, summary: { params: o, meta, overall: { ...S, ci: C }, mirror: { ...Sm, ci: Cm }, market: { ...Sk, ci: Ck }, perSignalCI: Cs, diffVsMirror: dM, diffVsMarket: dK, groups: Object.fromEntries(tables.map((t, i) => [i, t.js])) } };
 }
 
 export function writeOutputs(trades, rep, o) {
   fs.mkdirSync(o.out, { recursive: true });
-  const cols = ['sym', 'date', 'side', 'trig', 'tr', 'btcTr', 'type', 'slp', 'pos', 'entry', 'sl', 'tp', 'hasil', 'Rg', 'R', 'mirHasil', 'mirR', 'mktHasil', 'mktR', 'why'];
+  // >>> BARU: kolom quality & regime ditambahkan ke CSV
+  const cols = ['sym', 'date', 'side', 'trig', 'tr', 'btcTr', 'type', 'quality', 'regime', 'slp', 'pos', 'entry', 'sl', 'tp', 'hasil', 'Rg', 'R', 'mirHasil', 'mirR', 'mktHasil', 'mktR', 'why'];
   const csv = [cols.join(','), ...trades.map(x => cols.map(c => (typeof x[c] === 'number' ? +x[c].toPrecision(6) : x[c] ?? '')).join(','))].join('\n');
   fs.writeFileSync(path.join(o.out, 'trades.csv'), csv);
   let c = 0; const eq = ['date,cumR,cumR_mirror,cumR_market'];
