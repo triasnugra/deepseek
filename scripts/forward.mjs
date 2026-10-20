@@ -14,6 +14,13 @@ const JF = 'data/journal.json';
 
 // Menilai ulang baris yang sudah selesai dari field tersegel (entry/sl/tp/t/due). Hasil yang diedit
 // manual (hasil, R, tx) akan berbeda dari penilaian ulang.
+// Menilai ulang baris yang sudah selesai dari field tersegel (entry/sl/tp/t/due). Hasil yang diedit
+// manual (hasil, R, tx) akan berbeda dari penilaian ulang.
+//
+// >>> BARU: parameter trail:true HARUS sama dengan yang dipakai jurnal.mjs (LIVE_TRAIL).
+// Kalau nanti Anda mengubah LIVE_TRAIL di jurnal.mjs, ubah juga di sini. Kalau tidak,
+// regrade akan menghasilkan nilai berbeda dari jurnal dan verify --regrade akan menandai
+// semua baris sebagai mismatch palsu.
 export async function regrade(rows, P, log = () => {}) {
   const bad = []; let n = 0;
   for (const r of rows.filter(r => r.fwd && r.agen === P.agen && (r.arah === 'LONG' || r.arah === 'SHORT') && RES(r.hasil))) {
@@ -21,6 +28,7 @@ export async function regrade(rows, P, log = () => {}) {
     try {
       const g = await gradeTrade(r, {
         now: Date.now(),
+        trail: true,   // >>> BARU: samakan dengan LIVE_TRAIL di jurnal.mjs
         h1: async () => (await bj(`klines?symbol=${sym}&interval=1h&startTime=${t0}&limit=1000`)).map(mapK),
         m1: async (a, b) => (await bj(`klines?symbol=${sym}&interval=1m&startTime=${a}&endTime=${b}&limit=1000`)).map(mapK),
       });
