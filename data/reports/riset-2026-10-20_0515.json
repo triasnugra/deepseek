@@ -1,0 +1,370 @@
+{
+ "split": "2025-07-01",
+ "chosen": "market TP2R 7h q0 no-trail",
+ "verdict": {
+  "pass": false,
+  "why": "R/trade data pengembangan tidak positif"
+ },
+ "results": [
+  {
+   "name": "market TP2R 7h q0 no-trail",
+   "train": {
+    "signals": 2204,
+    "filled": 2204,
+    "fillRate": 1,
+    "tp": 378,
+    "sl": 1012,
+    "exp": 814,
+    "win": 0.2719424460431655,
+    "mean": -0.019550802469166087,
+    "perSignal": -0.019550802469166087,
+    "median": -0.44741376718412784,
+    "total": -43.08996864204206,
+    "pf": 0.9619435187436837,
+    "maxDD": 127.37074225322212,
+    "ci": {
+     "lo": -0.10087472034468664,
+     "hi": 0.06558389581248666,
+     "pLE0": 0.6884,
+     "clusters": 89
+    }
+   },
+   "test": {
+    "signals": 2050,
+    "filled": 2050,
+    "fillRate": 1,
+    "tp": 374,
+    "sl": 820,
+    "exp": 856,
+    "win": 0.3132328308207705,
+    "mean": 0.07531044454573907,
+    "perSignal": 0.07531044454573907,
+    "median": -0.1882585388724622,
+    "total": 154.38641131876508,
+    "pf": 1.1639745902701792,
+    "maxDD": 35.08791472140268,
+    "ci": {
+     "lo": -0.0018756717788095396,
+     "hi": 0.15522720732084824,
+     "pLE0": 0.028,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP2R 7h q50 no-trail",
+   "train": {
+    "signals": 1384,
+    "filled": 1384,
+    "fillRate": 1,
+    "tp": 206,
+    "sl": 675,
+    "exp": 503,
+    "win": 0.23382519863791146,
+    "mean": -0.1008192101084152,
+    "perSignal": -0.1008192101084152,
+    "median": -0.6275919306332642,
+    "total": -139.53378679004663,
+    "pf": 0.8134718449757196,
+    "maxDD": 141.51482243227932,
+    "ci": {
+     "lo": -0.18473349967478203,
+     "hi": -0.013468977633082413,
+     "pLE0": 0.9868,
+     "clusters": 90
+    }
+   },
+   "test": {
+    "signals": 1441,
+    "filled": 1441,
+    "fillRate": 1,
+    "tp": 227,
+    "sl": 568,
+    "exp": 646,
+    "win": 0.28553459119496855,
+    "mean": 0.05634823379678574,
+    "perSignal": 0.05634823379678574,
+    "median": -0.16555677094727705,
+    "total": 81.19780490116825,
+    "pf": 1.124212775978585,
+    "maxDD": 72.65233235501906,
+    "ci": {
+     "lo": -0.05151725614362561,
+     "hi": 0.17107485980515816,
+     "pLE0": 0.163,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP2R 7h q70 no-trail",
+   "train": {
+    "signals": 748,
+    "filled": 748,
+    "fillRate": 1,
+    "tp": 104,
+    "sl": 348,
+    "exp": 296,
+    "win": 0.23008849557522124,
+    "mean": -0.10434174916481602,
+    "perSignal": -0.10434174916481602,
+    "median": -0.539461801217619,
+    "total": -78.04762837528239,
+    "pf": 0.8025774615915118,
+    "maxDD": 80.27098615776742,
+    "ci": {
+     "lo": -0.1883332757003538,
+     "hi": -0.015696255063124588,
+     "pLE0": 0.99,
+     "clusters": 89
+    }
+   },
+   "test": {
+    "signals": 880,
+    "filled": 880,
+    "fillRate": 1,
+    "tp": 113,
+    "sl": 350,
+    "exp": 417,
+    "win": 0.24406047516198703,
+    "mean": 0.010903174117037997,
+    "perSignal": 0.010903174117037997,
+    "median": -0.16701013393893538,
+    "total": 9.594793222993438,
+    "pf": 1.0240553130126746,
+    "maxDD": 62.017851258122,
+    "ci": {
+     "lo": -0.1469481453625874,
+     "hi": 0.18747166124984793,
+     "pLE0": 0.4742,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP2R 7h q0 trail",
+   "train": {
+    "signals": 1683,
+    "filled": 1683,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1678,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -7.753500733137823,
+    "total": null,
+    "pf": 0.9931394727276923,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.0104,
+     "clusters": 89
+    }
+   },
+   "test": {
+    "signals": 1551,
+    "filled": 1551,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 3,
+    "exp": 1548,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -0.13144022770398583,
+    "total": null,
+    "pf": 0.9896665146719632,
+    "maxDD": null,
+    "ci": {
+     "lo": 0.007862925247875317,
+     "hi": null,
+     "pLE0": 0.0236,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP2R 7h q50 trail",
+   "train": {
+    "signals": 1119,
+    "filled": 1119,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1114,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -7.144127578411973,
+    "total": null,
+    "pf": 0.7863878409036723,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.003,
+     "clusters": 90
+    }
+   },
+   "test": {
+    "signals": 1179,
+    "filled": 1179,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1174,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -1.0683801944027647,
+    "total": null,
+    "pf": 0.963789974633236,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.001,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP3R 7h q50 trail",
+   "train": {
+    "signals": 1119,
+    "filled": 1119,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1114,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -7.144127578411973,
+    "total": null,
+    "pf": 0.7863878409036723,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.003,
+     "clusters": 90
+    }
+   },
+   "test": {
+    "signals": 1179,
+    "filled": 1179,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1174,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -1.0683801944027647,
+    "total": null,
+    "pf": 0.963789974633236,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.001,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP2R 5h q50 trail",
+   "train": {
+    "signals": 1360,
+    "filled": 1360,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 5,
+    "exp": 1355,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -0.14384457115818372,
+    "total": null,
+    "pf": 0.8476744353169181,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.012,
+     "clusters": 90
+    }
+   },
+   "test": {
+    "signals": 1455,
+    "filled": 1455,
+    "fillRate": 1,
+    "tp": 0,
+    "sl": 6,
+    "exp": 1449,
+    "win": 0,
+    "mean": null,
+    "perSignal": null,
+    "median": -1.2098839458413897,
+    "total": null,
+    "pf": 0.9318920415011277,
+    "maxDD": null,
+    "ci": {
+     "lo": null,
+     "hi": null,
+     "pLE0": 0.0006,
+     "clusters": 68
+    }
+   }
+  },
+  {
+   "name": "market TP3R 5h q70 no-trail",
+   "train": {
+    "signals": 804,
+    "filled": 804,
+    "fillRate": 1,
+    "tp": 43,
+    "sl": 325,
+    "exp": 436,
+    "win": 0.11684782608695653,
+    "mean": -0.06690879351700975,
+    "perSignal": -0.06690879351700975,
+    "median": -0.3519757856233024,
+    "total": -53.79466998767584,
+    "pf": 0.8630941012949865,
+    "maxDD": 66.47986387952321,
+    "ci": {
+     "lo": -0.16290117992265754,
+     "hi": 0.031097576135591446,
+     "pLE0": 0.91,
+     "clusters": 89
+    }
+   },
+   "test": {
+    "signals": 964,
+    "filled": 964,
+    "fillRate": 1,
+    "tp": 35,
+    "sl": 334,
+    "exp": 595,
+    "win": 0.0948509485094851,
+    "mean": -0.0015733526024030182,
+    "perSignal": -0.0015733526024030182,
+    "median": -0.07303565971348663,
+    "total": -1.5167119087165095,
+    "pf": 0.9961924105032206,
+    "maxDD": 69.81433348708164,
+    "ci": {
+     "lo": -0.14198273780555984,
+     "hi": 0.15448079424897784,
+     "pLE0": 0.531,
+     "clusters": 68
+    }
+   }
+  }
+ ]
+}
