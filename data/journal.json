@@ -2150,13 +2150,14 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "TP",
+  "R": 2,
   "engine": "0537067ed55fc5be",
   "fwd": 1,
   "seq": 66,
   "prev": "45d2640bb9d21a99803a",
-  "h": "b8135ff340afe57fafa7"
+  "h": "b8135ff340afe57fafa7",
+  "tx": 1792443600000
  },
  {
   "id": "2026-10-17|Aturan Eliz|UNI",
