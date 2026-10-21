@@ -44,5 +44,28 @@
   "seq": 2,
   "prev": "bc415eb7fafbf3007e51",
   "h": "5dd13e0f03263c81bb48"
+ },
+ {
+  "id": "2026-10-21|Aturan Eliz|TIA",
+  "waktu": "2026-10-21 01:23 UTC",
+  "t": 1792545837568,
+  "due": 1793150637568,
+  "agen": "Aturan Eliz",
+  "aset": "TIA",
+  "arah": "SHORT",
+  "entry": 0.6333,
+  "sl": 0.72829,
+  "tp": 0.44331,
+  "harga_awal": 0.6246,
+  "keyakinan": "",
+  "alasan": "deviasi atas gagal bertahan, sweep Monday High lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 3,
+  "prev": "5dd13e0f03263c81bb48",
+  "h": "644bcedaf194bcf82223"
  }
 ]
