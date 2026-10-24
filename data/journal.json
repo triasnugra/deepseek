@@ -67,5 +67,28 @@
   "seq": 3,
   "prev": "5dd13e0f03263c81bb48",
   "h": "644bcedaf194bcf82223"
+ },
+ {
+  "id": "2026-10-24|Aturan Eliz|MSTRB",
+  "waktu": "2026-10-24 03:54 UTC",
+  "t": 1792814069288,
+  "due": 1793418869288,
+  "agen": "Aturan Eliz",
+  "aset": "MSTRB",
+  "arah": "LONG",
+  "entry": 135.83,
+  "sl": 121.87,
+  "tp": 163.75,
+  "harga_awal": 146.71,
+  "keyakinan": "",
+  "alasan": "sweep Monday Low lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 4,
+  "prev": "644bcedaf194bcf82223",
+  "h": "3e11b9d42c1db026f721"
  }
 ]
