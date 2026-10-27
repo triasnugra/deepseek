@@ -1,5 +1,5 @@
 {
- "dibuat": "2026-10-27T00:44:29.197Z",
+ "dibuat": "2026-10-27T06:04:22.928Z",
  "chain": {
   "ok": true,
   "n": 4,
@@ -16,16 +16,16 @@
  "peek": false,
  "counts": {
   "tercatat_sesuai_protokol": 2,
-  "selesai": 0,
-  "menunggu": 2,
-  "terisi": 0,
+  "selesai": 2,
+  "menunggu": 0,
+  "terisi": 1,
   "minggu_berbeda": 0,
   "diabaikan_mesin_lain": 2,
   "dilewati_dedupe": 0
  },
  "progress": {
   "trade_terisi": [
-   0,
+   1,
    150
   ],
   "minggu": [
