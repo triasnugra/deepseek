@@ -86,13 +86,26 @@
   "keyakinan": "",
   "alasan": "deviasi atas gagal bertahan, sweep Monday High lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": 0.98,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 3,
   "prev": "5dd13e0f03263c81bb48",
-  "h": "644bcedaf194bcf82223"
+  "h": "644bcedaf194bcf82223",
+  "tx": 1793150637568,
+  "bm": {
+   "e": 0.6109,
+   "h": "kedaluwarsa",
+   "R": 0.744,
+   "tx": 1793150637568
+  },
+  "bi": {
+   "e": 0.6109,
+   "h": "kedaluwarsa",
+   "R": -0.744,
+   "tx": 1793150637568
+  }
  },
  {
   "id": "2026-10-24|Aturan Eliz|MSTRB",
