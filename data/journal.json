@@ -122,13 +122,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": -0.19,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 4,
   "prev": "644bcedaf194bcf82223",
-  "h": "3e11b9d42c1db026f721"
+  "h": "3e11b9d42c1db026f721",
+  "tx": 1793418869288,
+  "bm": {
+   "e": 146.72,
+   "h": "kedaluwarsa",
+   "R": -0.975,
+   "tx": 1793418869288
+  },
+  "bi": {
+   "e": 146.72,
+   "h": "kedaluwarsa",
+   "R": 0.975,
+   "tx": 1793418869288
+  }
  },
  {
   "id": "2026-10-31|Aturan Eliz|TRX",
