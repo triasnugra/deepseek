@@ -129,5 +129,28 @@
   "seq": 4,
   "prev": "644bcedaf194bcf82223",
   "h": "3e11b9d42c1db026f721"
+ },
+ {
+  "id": "2026-10-31|Aturan Eliz|TRX",
+  "waktu": "2026-10-31 01:27 UTC",
+  "t": 1793410035189,
+  "due": 1794014835189,
+  "agen": "Aturan Eliz",
+  "aset": "TRX",
+  "arah": "SHORT",
+  "entry": 0.3493,
+  "sl": 0.35941,
+  "tp": 0.32908,
+  "harga_awal": 0.3271,
+  "keyakinan": "",
+  "alasan": "Three Top: 2 sentuhan lalu manipulasi di atas, sweep Monday High lalu reclaim, Wolf: breakout trendline gagal",
+  "alert": "Hari terakhir bulan. Penutupan bulanan 00:00 UTC.",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 5,
+  "prev": "3e11b9d42c1db026f721",
+  "h": "28b04cf13c02591e31c7"
  }
 ]
