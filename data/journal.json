@@ -165,5 +165,28 @@
   "seq": 5,
   "prev": "3e11b9d42c1db026f721",
   "h": "28b04cf13c02591e31c7"
+ },
+ {
+  "id": "2026-11-02|Aturan Eliz|TRX",
+  "waktu": "2026-11-02 01:21 UTC",
+  "t": 1793582518290,
+  "due": 1794187318290,
+  "agen": "Aturan Eliz",
+  "aset": "TRX",
+  "arah": "SHORT",
+  "entry": 0.3493,
+  "sl": 0.36298,
+  "tp": 0.32194,
+  "harga_awal": 0.3132,
+  "keyakinan": "",
+  "alasan": "Three Top: 2 sentuhan lalu manipulasi di atas, sweep Monday High lalu reclaim, breakdown ber-close, retest",
+  "alert": "Senin: Monday range sedang terbentuk, harga cenderung kotor. Tunggu. Monday Low/High jadi level kunci minggu ini.",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 6,
+  "prev": "28b04cf13c02591e31c7",
+  "h": "acef749b08b35cc64311"
  }
 ]
