@@ -257,5 +257,28 @@
   "seq": 9,
   "prev": "5d1886ab1694c9ed0cbb",
   "h": "1d3bfcc4824479aa118b"
+ },
+ {
+  "id": "2026-11-05|Aturan Eliz|UNI",
+  "waktu": "2026-11-05 01:43 UTC",
+  "t": 1793843012778,
+  "due": 1794447812778,
+  "agen": "Aturan Eliz",
+  "aset": "UNI",
+  "arah": "LONG",
+  "entry": 6.966,
+  "sl": 6.1097,
+  "tp": 8.6786,
+  "harga_awal": 7.626,
+  "keyakinan": "",
+  "alasan": "sweep Monday Low lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 10,
+  "prev": "1d3bfcc4824479aa118b",
+  "h": "f7d62b3cb1a2b717934a"
  }
 ]
