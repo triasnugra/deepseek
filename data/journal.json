@@ -158,13 +158,26 @@
   "keyakinan": "",
   "alasan": "Three Top: 2 sentuhan lalu manipulasi di atas, sweep Monday High lalu reclaim, Wolf: breakout trendline gagal",
   "alert": "Hari terakhir bulan. Penutupan bulanan 00:00 UTC.",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 5,
   "prev": "3e11b9d42c1db026f721",
-  "h": "28b04cf13c02591e31c7"
+  "h": "28b04cf13c02591e31c7",
+  "tx": 1794014835189,
+  "bm": {
+   "e": 0.3231,
+   "h": "kedaluwarsa",
+   "R": 0.475,
+   "tx": 1794014835189
+  },
+  "bi": {
+   "e": 0.3231,
+   "h": "kedaluwarsa",
+   "R": -0.475,
+   "tx": 1794014835189
+  }
  },
  {
   "id": "2026-11-02|Aturan Eliz|TRX",
