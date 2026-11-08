@@ -293,5 +293,28 @@
   "seq": 10,
   "prev": "1d3bfcc4824479aa118b",
   "h": "f7d62b3cb1a2b717934a"
+ },
+ {
+  "id": "2026-11-08|Aturan Eliz|TRX",
+  "waktu": "2026-11-08 05:15 UTC",
+  "t": 1794114919053,
+  "due": 1794719719053,
+  "agen": "Aturan Eliz",
+  "aset": "TRX",
+  "arah": "LONG",
+  "entry": 0.31785,
+  "sl": 0.30669,
+  "tp": 0.34016,
+  "harga_awal": 0.32,
+  "keyakinan": "",
+  "alasan": "Fib 0.75 tren naik",
+  "alert": "Menjelang penutupan weekly (Senin 00:00 UTC).",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 11,
+  "prev": "f7d62b3cb1a2b717934a",
+  "h": "08baae8d4bd8b7cb2f9e"
  }
 ]
