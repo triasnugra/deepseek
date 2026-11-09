@@ -1,9 +1,9 @@
 {
- "dibuat": "2026-11-08T23:29:55.246Z",
+ "dibuat": "2026-11-09T05:21:45.788Z",
  "chain": {
   "ok": true,
-  "n": 11,
-  "head": "08baae8d4bd8b7cb2f9e",
+  "n": 12,
+  "head": "2a4744638166a26826af",
   "errors": []
  },
  "protocol": {
@@ -20,7 +20,7 @@
   "menunggu": 0,
   "terisi": 1,
   "minggu_berbeda": 0,
-  "diabaikan_mesin_lain": 9,
+  "diabaikan_mesin_lain": 10,
   "dilewati_dedupe": 0
  },
  "progress": {
