@@ -230,13 +230,26 @@
   "keyakinan": "",
   "alasan": "Wolf: breakout trendline gagal",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": 0.92,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 7,
   "prev": "acef749b08b35cc64311",
-  "h": "c1381070cec8fe588e3a"
+  "h": "c1381070cec8fe588e3a",
+  "tx": 1794282727147,
+  "bm": {
+   "e": 11.126,
+   "h": "kedaluwarsa",
+   "R": 0.532,
+   "tx": 1794282727147
+  },
+  "bi": {
+   "e": 11.126,
+   "h": "kedaluwarsa",
+   "R": -0.532,
+   "tx": 1794282727147
+  }
  },
  {
   "id": "2026-11-03|Aturan Eliz|CELO",
@@ -253,13 +266,26 @@
   "keyakinan": "",
   "alasan": "Wolf: breakout trendline gagal",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 8,
   "prev": "c1381070cec8fe588e3a",
-  "h": "5d1886ab1694c9ed0cbb"
+  "h": "5d1886ab1694c9ed0cbb",
+  "tx": 1794282727147,
+  "bm": {
+   "e": 0.07169,
+   "h": "kedaluwarsa",
+   "R": 0.836,
+   "tx": 1794282727147
+  },
+  "bi": {
+   "e": 0.07169,
+   "h": "kedaluwarsa",
+   "R": -0.836,
+   "tx": 1794282727147
+  }
  },
  {
   "id": "2026-11-03|Aturan Eliz|TRX",
@@ -276,13 +302,26 @@
   "keyakinan": "",
   "alasan": "Three Top: 2 sentuhan lalu manipulasi di atas, breakdown ber-close, retest",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 9,
   "prev": "5d1886ab1694c9ed0cbb",
-  "h": "1d3bfcc4824479aa118b"
+  "h": "1d3bfcc4824479aa118b",
+  "tx": 1794282727147,
+  "bm": {
+   "e": 0.3215,
+   "h": "kedaluwarsa",
+   "R": 0.284,
+   "tx": 1794282727147
+  },
+  "bi": {
+   "e": 0.3215,
+   "h": "kedaluwarsa",
+   "R": -0.284,
+   "tx": 1794282727147
+  }
  },
  {
   "id": "2026-11-05|Aturan Eliz|UNI",
