@@ -338,13 +338,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday Low lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": -0.87,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 10,
   "prev": "1d3bfcc4824479aa118b",
-  "h": "f7d62b3cb1a2b717934a"
+  "h": "f7d62b3cb1a2b717934a",
+  "tx": 1794447812778,
+  "bm": {
+   "e": 7.663,
+   "h": "kedaluwarsa",
+   "R": -1.683,
+   "tx": 1794447812778
+  },
+  "bi": {
+   "e": 7.663,
+   "h": "kedaluwarsa",
+   "R": 1.683,
+   "tx": 1794447812778
+  }
  },
  {
   "id": "2026-11-08|Aturan Eliz|TRX",
@@ -460,5 +473,28 @@
   "seq": 15,
   "prev": "36d4a169d57ce33fa4db",
   "h": "2e0dace730e8ef3a3ee7"
+ },
+ {
+  "id": "2026-11-12|Aturan Eliz|BTC",
+  "waktu": "2026-11-12 03:44 UTC",
+  "t": 1794455089910,
+  "due": 1795059889910,
+  "agen": "Aturan Eliz",
+  "aset": "BTC",
+  "arah": "SHORT",
+  "entry": 74888,
+  "sl": 78553,
+  "tp": 67558,
+  "harga_awal": 74015.2,
+  "keyakinan": "",
+  "alasan": "breakdown ber-close, retest",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 16,
+  "prev": "2e0dace730e8ef3a3ee7",
+  "h": "65b8ff740dcf4ab373fb"
  }
 ]
