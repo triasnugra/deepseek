@@ -565,5 +565,28 @@
   "seq": 19,
   "prev": "88b8c87e11c3aeed6981",
   "h": "b85b06afb71f0d72cc56"
+ },
+ {
+  "id": "2026-11-14|Aturan Eliz|PEPE",
+  "waktu": "2026-11-14 02:57 UTC",
+  "t": 1794625023423,
+  "due": 1795229823423,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000538,
+  "sl": 0.0000059071,
+  "tp": 0.0000043257,
+  "harga_awal": 0.00000441,
+  "keyakinan": "",
+  "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 20,
+  "prev": "b85b06afb71f0d72cc56",
+  "h": "38aa8473ffc85ef478e9"
  }
 ]
