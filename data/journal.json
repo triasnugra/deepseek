@@ -374,13 +374,26 @@
   "keyakinan": "",
   "alasan": "Fib 0.75 tren naik",
   "alert": "Menjelang penutupan weekly (Senin 00:00 UTC).",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": -0.91,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 11,
   "prev": "f7d62b3cb1a2b717934a",
-  "h": "08baae8d4bd8b7cb2f9e"
+  "h": "08baae8d4bd8b7cb2f9e",
+  "tx": 1794719719053,
+  "bm": {
+   "e": 0.3207,
+   "h": "kedaluwarsa",
+   "R": -1.165,
+   "tx": 1794719719053
+  },
+  "bi": {
+   "e": 0.3207,
+   "h": "kedaluwarsa",
+   "R": 1.165,
+   "tx": 1794719719053
+  }
  },
  {
   "id": "2026-11-09|Aturan Eliz|ARB",
@@ -588,5 +601,28 @@
   "seq": 20,
   "prev": "b85b06afb71f0d72cc56",
   "h": "38aa8473ffc85ef478e9"
+ },
+ {
+  "id": "2026-11-15|Aturan Eliz|PEPE",
+  "waktu": "2026-11-15 05:36 UTC",
+  "t": 1794720997337,
+  "due": 1795325797337,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000538,
+  "sl": 0.0000059431,
+  "tp": 0.0000042537,
+  "harga_awal": 0.00000389,
+  "keyakinan": "",
+  "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim",
+  "alert": "Menjelang penutupan weekly (Senin 00:00 UTC).",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 21,
+  "prev": "38aa8473ffc85ef478e9",
+  "h": "7c16e65cbb82a1032db2"
  }
 ]
