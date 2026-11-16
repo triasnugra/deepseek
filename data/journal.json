@@ -410,13 +410,26 @@
   "keyakinan": "",
   "alasan": "Wolf: breakout trendline gagal",
   "alert": "Senin: Monday range sedang terbentuk, harga cenderung kotor. Tunggu. Monday Low/High jadi level kunci minggu ini.",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": 1.82,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 12,
   "prev": "08baae8d4bd8b7cb2f9e",
-  "h": "2a4744638166a26826af"
+  "h": "2a4744638166a26826af",
+  "tx": 1794806505527,
+  "bm": {
+   "e": 0.1742,
+   "h": "kedaluwarsa",
+   "R": 2.146,
+   "tx": 1794806505527
+  },
+  "bi": {
+   "e": 0.1742,
+   "h": "kedaluwarsa",
+   "R": -2.146,
+   "tx": 1794806505527
+  }
  },
  {
   "id": "2026-11-11|Aturan Eliz|BTC",
@@ -624,5 +637,51 @@
   "seq": 21,
   "prev": "38aa8473ffc85ef478e9",
   "h": "7c16e65cbb82a1032db2"
+ },
+ {
+  "id": "2026-11-16|Aturan Eliz|PEPE",
+  "waktu": "2026-11-16 05:31 UTC",
+  "t": 1794807082421,
+  "due": 1795411882421,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000538,
+  "sl": 0.0000059457,
+  "tp": 0.0000042486,
+  "harga_awal": 0.00000388,
+  "keyakinan": "",
+  "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim",
+  "alert": "Senin: Monday range sedang terbentuk, harga cenderung kotor. Tunggu. Monday Low/High jadi level kunci minggu ini.",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 22,
+  "prev": "7c16e65cbb82a1032db2",
+  "h": "b66800d21c9b6fb2b85f"
+ },
+ {
+  "id": "2026-11-16|Aturan Eliz|INIT",
+  "waktu": "2026-11-16 05:31 UTC",
+  "t": 1794807082421,
+  "due": 1795411882421,
+  "agen": "Aturan Eliz",
+  "aset": "INIT",
+  "arah": "SHORT",
+  "entry": 0.33193,
+  "sl": 0.38172,
+  "tp": 0.23235,
+  "harga_awal": 0.10791,
+  "keyakinan": "",
+  "alasan": "deviasi atas gagal bertahan, sweep Monday High lalu reclaim",
+  "alert": "Senin: Monday range sedang terbentuk, harga cenderung kotor. Tunggu. Monday Low/High jadi level kunci minggu ini.",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 23,
+  "prev": "b66800d21c9b6fb2b85f",
+  "h": "a15a35c4bd5329fecd82"
  }
 ]
