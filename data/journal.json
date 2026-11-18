@@ -446,13 +446,26 @@
   "keyakinan": "",
   "alasan": "breakdown ber-close, retest",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 13,
   "prev": "2a4744638166a26826af",
-  "h": "293e93b4e0ee3631a42b"
+  "h": "293e93b4e0ee3631a42b",
+  "tx": 1794965054210,
+  "bm": {
+   "e": 73518,
+   "h": "kedaluwarsa",
+   "R": 2.394,
+   "tx": 1794965054210
+  },
+  "bi": {
+   "e": 73518,
+   "h": "kedaluwarsa",
+   "R": -2.394,
+   "tx": 1794965054210
+  }
  },
  {
   "id": "2026-11-11|Aturan Eliz|ADA",
@@ -469,13 +482,26 @@
   "keyakinan": "",
   "alasan": "breakdown ber-close, retest",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": 1.4,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 14,
   "prev": "293e93b4e0ee3631a42b",
-  "h": "36d4a169d57ce33fa4db"
+  "h": "36d4a169d57ce33fa4db",
+  "tx": 1794965054211,
+  "bm": {
+   "e": 0.1744,
+   "h": "kedaluwarsa",
+   "R": 1.202,
+   "tx": 1794965054211
+  },
+  "bi": {
+   "e": 0.1744,
+   "h": "kedaluwarsa",
+   "R": -1.202,
+   "tx": 1794965054211
+  }
  },
  {
   "id": "2026-11-11|Aturan Eliz|ZEC",
@@ -492,13 +518,26 @@
   "keyakinan": "",
   "alasan": "Three Tap: 2 sentuhan lalu manipulasi di bawah",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": -0.49,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 15,
   "prev": "36d4a169d57ce33fa4db",
-  "h": "2e0dace730e8ef3a3ee7"
+  "h": "2e0dace730e8ef3a3ee7",
+  "tx": 1794965054211,
+  "bm": {
+   "e": 1017.75,
+   "h": "kedaluwarsa",
+   "R": -0.338,
+   "tx": 1794965054211
+  },
+  "bi": {
+   "e": 1017.75,
+   "h": "kedaluwarsa",
+   "R": 0.338,
+   "tx": 1794965054211
+  }
  },
  {
   "id": "2026-11-12|Aturan Eliz|BTC",
