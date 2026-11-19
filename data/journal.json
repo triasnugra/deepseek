@@ -554,13 +554,26 @@
   "keyakinan": "",
   "alasan": "breakdown ber-close, retest",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 16,
   "prev": "2e0dace730e8ef3a3ee7",
-  "h": "65b8ff740dcf4ab373fb"
+  "h": "65b8ff740dcf4ab373fb",
+  "tx": 1795059889910,
+  "bm": {
+   "e": 73776,
+   "h": "kedaluwarsa",
+   "R": 3.05,
+   "tx": 1795059889910
+  },
+  "bi": {
+   "e": 73776,
+   "h": "kedaluwarsa",
+   "R": -3.05,
+   "tx": 1795059889910
+  }
  },
  {
   "id": "2026-11-13|Aturan Eliz|PEPE",
@@ -722,5 +735,51 @@
   "seq": 23,
   "prev": "b66800d21c9b6fb2b85f",
   "h": "a15a35c4bd5329fecd82"
+ },
+ {
+  "id": "2026-11-19|Aturan Eliz|PEPE",
+  "waktu": "2026-11-19 04:24 UTC",
+  "t": 1795062276387,
+  "due": 1795667076387,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000538,
+  "sl": 0.0000058917,
+  "tp": 0.0000043566,
+  "harga_awal": 0.00000376,
+  "keyakinan": "",
+  "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 24,
+  "prev": "a15a35c4bd5329fecd82",
+  "h": "10b404341dd46f53e3f1"
+ },
+ {
+  "id": "2026-11-19|Aturan Eliz|MUB",
+  "waktu": "2026-11-19 04:24 UTC",
+  "t": 1795062276388,
+  "due": 1795667076388,
+  "agen": "Aturan Eliz",
+  "aset": "MUB",
+  "arah": "SHORT",
+  "entry": 750.5,
+  "sl": 848.98,
+  "tp": 553.53,
+  "harga_awal": 712.6,
+  "keyakinan": "",
+  "alasan": "Wolf: breakout trendline gagal",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 25,
+  "prev": "10b404341dd46f53e3f1",
+  "h": "52c65473d54bbb44670e"
  }
 ]
