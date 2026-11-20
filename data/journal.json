@@ -590,13 +590,26 @@
   "keyakinan": "",
   "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim, Wolf: breakout trendline gagal",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 17,
   "prev": "65b8ff740dcf4ab373fb",
-  "h": "689889eb8881ceec865b"
+  "h": "689889eb8881ceec865b",
+  "tx": 1795137780053,
+  "bm": {
+   "e": 0.00000455,
+   "h": "kedaluwarsa",
+   "R": 1.383,
+   "tx": 1795137780053
+  },
+  "bi": {
+   "e": 0.00000455,
+   "h": "kedaluwarsa",
+   "R": -1.383,
+   "tx": 1795137780053
+  }
  },
  {
   "id": "2026-11-13|Aturan Eliz|LTC",
@@ -613,13 +626,26 @@
   "keyakinan": "",
   "alasan": "breakdown ber-close, retest",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "kedaluwarsa",
+  "R": 2.01,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 18,
   "prev": "689889eb8881ceec865b",
-  "h": "88b8c87e11c3aeed6981"
+  "h": "88b8c87e11c3aeed6981",
+  "tx": 1795137780053,
+  "bm": {
+   "e": 50.26,
+   "h": "kedaluwarsa",
+   "R": 2.028,
+   "tx": 1795137780053
+  },
+  "bi": {
+   "e": 50.26,
+   "h": "kedaluwarsa",
+   "R": -2.028,
+   "tx": 1795137780053
+  }
  },
  {
   "id": "2026-11-13|Aturan Eliz|INIT",
@@ -636,13 +662,26 @@
   "keyakinan": "",
   "alasan": "deviasi atas gagal bertahan, sweep Monday High lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 19,
   "prev": "88b8c87e11c3aeed6981",
-  "h": "b85b06afb71f0d72cc56"
+  "h": "b85b06afb71f0d72cc56",
+  "tx": 1795137780053,
+  "bm": {
+   "e": 0.11818,
+   "h": "kedaluwarsa",
+   "R": 0.484,
+   "tx": 1795137780053
+  },
+  "bi": {
+   "e": 0.11818,
+   "h": "kedaluwarsa",
+   "R": -0.484,
+   "tx": 1795137780053
+  }
  },
  {
   "id": "2026-11-14|Aturan Eliz|PEPE",
@@ -781,5 +820,28 @@
   "seq": 25,
   "prev": "10b404341dd46f53e3f1",
   "h": "52c65473d54bbb44670e"
+ },
+ {
+  "id": "2026-11-20|Aturan Eliz|PEPE",
+  "waktu": "2026-11-20 03:40 UTC",
+  "t": 1795146004034,
+  "due": 1795750804034,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000395,
+  "sl": 0.0000045425,
+  "tp": 0.000002765,
+  "harga_awal": 0.00000372,
+  "keyakinan": "",
+  "alasan": "sweep Monday High lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 26,
+  "prev": "52c65473d54bbb44670e",
+  "h": "44762b1eab7803d9f89d"
  }
 ]
