@@ -698,13 +698,26 @@
   "keyakinan": "",
   "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan beli melemah, sweep Monday High lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 20,
   "prev": "b85b06afb71f0d72cc56",
-  "h": "38aa8473ffc85ef478e9"
+  "h": "38aa8473ffc85ef478e9",
+  "tx": 1795229823423,
+  "bm": {
+   "e": 0.00000432,
+   "h": "kedaluwarsa",
+   "R": 1.632,
+   "tx": 1795229823423
+  },
+  "bi": {
+   "e": 0.00000432,
+   "h": "kedaluwarsa",
+   "R": -1.632,
+   "tx": 1795229823423
+  }
  },
  {
   "id": "2026-11-15|Aturan Eliz|PEPE",
