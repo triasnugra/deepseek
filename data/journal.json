@@ -902,5 +902,28 @@
   "seq": 28,
   "prev": "416b06d44411154a67cf",
   "h": "0cfb52664da30e9ad5ab"
+ },
+ {
+  "id": "2026-11-22|Aturan Eliz|PEPE",
+  "waktu": "2026-11-22 01:57 UTC",
+  "t": 1795312678059,
+  "due": 1795917478059,
+  "agen": "Aturan Eliz",
+  "aset": "PEPE",
+  "arah": "SHORT",
+  "entry": 0.00000395,
+  "sl": 0.0000045425,
+  "tp": 0.000002765,
+  "harga_awal": 0.00000341,
+  "keyakinan": "",
+  "alasan": "sweep Monday High lalu reclaim",
+  "alert": "Menjelang penutupan weekly (Senin 00:00 UTC).",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 29,
+  "prev": "0cfb52664da30e9ad5ab",
+  "h": "26bfd52a42b4201b10d0"
  }
 ]
