@@ -1079,5 +1079,28 @@
   "seq": 34,
   "prev": "9093804c18b49aeca57d",
   "h": "eb95c1322c3b6e0baccb"
+ },
+ {
+  "id": "2026-11-26|Aturan Eliz|XRP",
+  "waktu": "2026-11-26 02:23 UTC",
+  "t": 1795659820081,
+  "due": 1796264620081,
+  "agen": "Aturan Eliz",
+  "aset": "XRP",
+  "arah": "LONG",
+  "entry": 0.9107,
+  "sl": 0.83441,
+  "tp": 1.0633,
+  "harga_awal": 0.9378,
+  "keyakinan": "",
+  "alasan": "Double Deviation: sweep ke-2 lebih dangkal, tekanan jual melemah, deviasi bawah lalu recovery, sweep Monday Low lalu reclaim",
+  "alert": "",
+  "hasil": "menunggu",
+  "R": "",
+  "engine": "a9dfb1a6ad82f956",
+  "fwd": 1,
+  "seq": 35,
+  "prev": "eb95c1322c3b6e0baccb",
+  "h": "71dc7893d932066ef6cc"
  }
 ]
