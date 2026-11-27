@@ -914,13 +914,26 @@
   "keyakinan": "",
   "alasan": "sweep Monday High lalu reclaim",
   "alert": "",
-  "hasil": "menunggu",
-  "R": "",
+  "hasil": "tidak terisi",
+  "R": 0,
   "engine": "a9dfb1a6ad82f956",
   "fwd": 1,
   "seq": 26,
   "prev": "52c65473d54bbb44670e",
-  "h": "44762b1eab7803d9f89d"
+  "h": "44762b1eab7803d9f89d",
+  "tx": 1795750804034,
+  "bm": {
+   "e": 0.00000359,
+   "h": "kedaluwarsa",
+   "R": 0.034,
+   "tx": 1795750804034
+  },
+  "bi": {
+   "e": 0.00000359,
+   "h": "kedaluwarsa",
+   "R": -0.034,
+   "tx": 1795750804034
+  }
  },
  {
   "id": "2026-11-21|Aturan Eliz|ZEC",
